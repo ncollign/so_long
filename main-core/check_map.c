@@ -9,3 +9,8 @@
     - P : Position de départ du personnage (min 1)
     - Vérifier si chemin possible (Juste si des cases autour de la position de base ou chemin complet ?)
         Si chemin complet : Utiliser principe du démineur (fonction récursive)*/
+
+void    ft_check_walls(void)
+{
+    
+}
