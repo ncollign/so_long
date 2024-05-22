@@ -1,9 +1,7 @@
-SRCS = $(wildcard *.c) \
-       $(wildcard ft_printf/*.c) \
-       $(wildcard get_next_line/*.c)
+SRCS = $(shell find . -type f -name '*.c')
 OBJS = $(SRCS:.c=.o)
 NAME = libft.a
-CC = clang
+CC = gcc
 CFLAGS = -Wall -Werror -Wextra -I ./
 
 .c.o:
