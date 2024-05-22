@@ -1,6 +1,7 @@
 #define MAP_WIDTH 15
 #define MAP_HEIGHT 5
 #define MAP_PATH "../maps/map1.ber"
+#include "../libft/libft.h"
 #include "../libft/libft.a"
 #include <fcntl.h>
 
