@@ -12,12 +12,6 @@
 
 #include "../libft.h"	
 
-static void	ft_free(char **buffer)
-{
-	free(*buffer);
-	*buffer = NULL;
-}
-
 size_t	ft_strlen(const char *c)
 {
 	size_t	i;

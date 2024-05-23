@@ -71,4 +71,8 @@ int		ft_nblen(int n);
 #  define BUFFER_SIZE 5
 # endif
 char	*get_next_line(int fd);
+
+// Autre
+void	ft_free(char **buffer);
+
 #endif
