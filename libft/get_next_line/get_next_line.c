@@ -12,16 +12,6 @@
 
 #include "../libft.h"	
 
-size_t	ft_strlen(const char *c)
-{
-	size_t	i;
-
-	i = 0;
-	while (c[i] != '\0')
-		i++;
-	return (i);
-}
-
 static char	*read_line(int fd, char *buf, char *backup)
 {
 	int		nb_byte;
