@@ -24,7 +24,7 @@ Tile    getMapSize(const char *map_path)
 
     map_fd = open(map_path, O_RDONLY);
     if (map_fd == -1)
-		size.comment = "Error while opening the map file :(";
+		size.comment = "Error\nMap file could not be open.";
 	else
 	{
 		line = get_next_line(map_fd);
@@ -33,8 +33,8 @@ Tile    getMapSize(const char *map_path)
 		while (get_next_line(map_fd) != NULL)
 			size.y++;
 		size.y++;
-		if (size.y < 3 || size.x < 3)
-			size.comment = "The map is too small";
+		if (size.y < 4 || size.x < 4)
+			size.comment = "Error\nThe map is too small";
 		else
 			size.comment = "OK";
 	}
@@ -61,5 +61,4 @@ int	checkMapPath(char *map_path)
 		}	
 	}
 	return (0);
-
 }

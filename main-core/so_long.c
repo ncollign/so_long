@@ -10,11 +10,10 @@ int	mapRead(const Tile map_size, Tile map[map_size.x][map_size.y], const char *m
 
 	map_fd = open(map_path, O_RDONLY);
 	if (map_fd == -1)
-		ft_printf("Erreur lors du chargement de la carte !");
-	// Ajouter sécurités pour ouverture de la carte
+		ft_printf("Error\nMap file could not be open.");
 	line = ft_calloc(map_size.x + 1, sizeof(char));
 	if (!line)
-		ft_printf("Erreur lors du chargement de la carte !");
+		ft_printf("Error\nMemory allocation failed !");
 	y = 0;
 	while (y < map_size.y && line != NULL)
 	{
@@ -60,7 +59,7 @@ void	initGame(char *map_path)
 	Tile	map_size;
 
 	map_size = getMapSize(map_path);
-	if (ft_strncmp(map_size.comment, "OK", ft_strlen(map_size.comment)) == 1)
+	if (ft_strncmp(map_size.comment, "OK", ft_strlen("OK") + 1) != 0)
 		ft_printf("%s\n", map_size.comment);
 	else
 	{
