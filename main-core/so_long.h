@@ -13,6 +13,7 @@ typedef	struct
 
 Tile    getMapSize(const char *map_path);
 int	checkMapPath(char *map_path);
+Tile	checkMap(Tile map_info, const Tile map[map_info.x][map_info.y]);
 
 #endif
 
