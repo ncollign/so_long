@@ -25,7 +25,7 @@ Tile	checkMap(Tile map_info, const Tile map[map_info.x][map_info.y])
 			if ((x == 0) || (x == map_info.x - 1))
 			{
 				if (map[x][y].type != '1')
-					map_info.comment = "Error\nThe map is not closed with walls or is not rectangular";
+					map_info.comment = "Error\nThe map is not closed with walls or is not rectangular"; // Toutes les lignes doivent être de la même longueur pour être rectangulaire
 			}
 			if ((y == 0) || (y == map_info.y - 1))
 			{

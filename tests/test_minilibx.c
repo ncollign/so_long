@@ -1,6 +1,5 @@
 #include "../minilibx_linux/mlx.h"
 #include "../main-core/so_long.h"
-#include <X11/keysym.h>
 #include <stdio.h>
 
 #define	WIDTH	400
