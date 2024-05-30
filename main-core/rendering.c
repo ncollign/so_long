@@ -57,16 +57,16 @@ t_img *resize_image(void *mlx_ptr, t_img *src_img, int new_width, int new_height
     return new_img;
 }
 
-void refresh_cell(t_mlx_data *mlx_data, char **map, int x, int y)
+void refresh_cell(t_mlx_data *mlx_data, int x, int y)
 /* This function refresh a cell on the display */
 {
-    if (map[y][x] == '1')
+    if (mlx_data->map[y][x].type == '1')
         mlx_put_image_to_window(mlx_data->mlx_ptr, mlx_data->win_ptr, mlx_data->walls->img_ptr, x * mlx_data->cell_size, y * mlx_data->cell_size);
-    else if (map[y][x] == 'C')
+    else if (mlx_data->map[y][x].type == 'C')
         mlx_put_image_to_window(mlx_data->mlx_ptr, mlx_data->win_ptr, mlx_data->collectibles->img_ptr, x * mlx_data->cell_size, y * mlx_data->cell_size);
-    else if (map[y][x] == 'P')
+    else if (mlx_data->map[y][x].type == 'P')
         mlx_put_image_to_window(mlx_data->mlx_ptr, mlx_data->win_ptr, mlx_data->player->img_ptr, x * mlx_data->cell_size, y * mlx_data->cell_size);
-    else if (map[y][x] == 'E')
+    else if (mlx_data->map[y][x].type == 'E')
         mlx_put_image_to_window(mlx_data->mlx_ptr, mlx_data->win_ptr, mlx_data->exit->img_ptr, x * mlx_data->cell_size, y * mlx_data->cell_size);
     else
         mlx_put_image_to_window(mlx_data->mlx_ptr, mlx_data->win_ptr, mlx_data->background->img_ptr, x * mlx_data->cell_size, y * mlx_data->cell_size);
