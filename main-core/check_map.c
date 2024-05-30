@@ -51,31 +51,41 @@ Tile	checkMap(Tile map_info, const Tile map[map_info.x][map_info.y])
 	return (map_info);
 }
 
-Tile	getMapSize(const char *map_path)
+int	getMapSize(t_mlx_data *data, const char *map_path)
 /* This function gives the size of the map */
 {
-    Tile	size;
+    //Tile	size;
     int	map_fd;
+	int	x;
+	int	y;
     char	*line;
 
+	x = 0;
+	y = 0;
     map_fd = open(map_path, O_RDONLY);
     if (map_fd == -1)
-		size.comment = "Error\nMap file could not be open.";
+	{
+		ft_printf("Error\nMap file could not be open.");
+		return (-1);
+	}
 	else
 	{
 		line = get_next_line(map_fd);
-		size.x = ft_strlen(line) - 2;
-		size.y = 0;
+		x = ft_strlen(line) - 2;
+		y = 0;
 		while (get_next_line(map_fd) != NULL)
-			size.y++;
-		size.y++;
-		if (size.y < 4 || size.x < 4)
-			size.comment = "Error\nThe map is too small";
-		else
-			size.comment = "OK";
+			y++;
+		y++;
+		if (y < 4 || x < 4)
+		{	
+			ft_printf("Error\nThe map is too small");
+			return (-1);
+		}
 	}
     close(map_fd);
-    return (size);
+	data->map_width = x;
+	data->map_height = y;
+    return (0);
 }
 
 int	checkMapPath(char *map_path)
