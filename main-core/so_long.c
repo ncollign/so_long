@@ -1,122 +1,115 @@
 #include "so_long.h"
 
-int	mapRead(t_mlx_data *data, const char *map_path)
-/* This function reads the fd containing the map and create a 2d table with the map*/
+int mapRead(t_mlx_data *data, const char *map_path)
+/* This function reads the fd containing the map and creates a 2D table with the map */
 {
-	char	*line;
-	int	x;
-	int	y;
-	int	map_fd ;
+    char *line;
+    int x, y;
+    int map_fd;
 
-	map_fd = open(map_path, O_RDONLY);
-	if (map_fd == -1)
-		ft_printf("Error\nMap file could not be open.");
-	line = ft_calloc(data->map_width + 1, sizeof(char));
-	if (!line)
-		ft_printf("Error\nMemory allocation failed !");
-	y = 0;
-	while (y < data->map_height && line != NULL)
-	{
-		x = 0;
-		line = get_next_line(map_fd);
-		data->map = malloc(data->map_height * sizeof(Tile *));
-		while (x < data->map_width && line[x] != '\0')
-		{
-			data->map[y] = malloc(data->map_width * sizeof(Tile *));
-			data->map[x][y].type = line[x];
-			x++;
-		}
-		y++;
-	}
-	ft_free(&line);
-	close(map_fd);
-	return (1);
+    map_fd = open(map_path, O_RDONLY);
+    if (map_fd == -1)
+    {
+        ft_printf("Error\nMap file could not be opened.\n");
+        return (-1);
+    }
+
+    data->map = (Tile **)malloc(data->map_height * sizeof(Tile *));
+    if (!data->map)
+    {
+        ft_printf("Error\nMemory allocation failed!\n");
+        close(map_fd);
+        return (-1);
+    }
+
+    y = 0;
+    while ((line = get_next_line(map_fd)) != NULL && y < data->map_height)
+    {
+        data->map[y] = (Tile *)malloc(data->map_width * sizeof(Tile));
+        if (!data->map[y])
+        {
+            ft_printf("Error\nMemory allocation failed!\n");
+            ft_free(&line);
+            close(map_fd);
+            return (-1);
+        }
+
+        x = 0;
+        while (x < data->map_width && line[x] != '\0')
+        {
+            data->map[y][x].type = line[x];
+            x++;
+        }
+
+        ft_free(&line);
+        y++;
+    }
+    close(map_fd);
+    return (0);
 }
 
-void	printMap(t_mlx_data *data)
-/* This function prints the map in the terminal using ft_printf */
-{
-	int	x;
-	int	y;
-
-	y = 0;
-	while (y < data->map_height)
-	{
-		x = 0;
-		while (x < data->map_width)
-		{
-			ft_printf("%c", data->map[x][y].type);
-			x++;
-		}
-		ft_printf("\n");
-		y++;
-	}
-}
-
-t_mlx_data *initGame(int map_width, int map_height, int cell_size)
+int initGame(t_mlx_data *data)
 /* This function initialize the game */
 {
-    t_mlx_data *mlx_data = malloc(sizeof(t_mlx_data));
-    if (!mlx_data)
-        return NULL;
+    if (!data)
+        return (1);
     
-    mlx_data->mlx_ptr = mlx_init();
-    if (!mlx_data->mlx_ptr)
+    data->mlx_ptr = mlx_init();
+    if (!data->mlx_ptr)
     {
-        free(mlx_data);
-        return NULL;
+        free(data);
+        return (1);
     }
     
-    mlx_data->win_ptr = mlx_new_window(mlx_data->mlx_ptr, map_width * cell_size, map_height * cell_size, "Game Window");
-    if (!mlx_data->win_ptr)
+    data->win_ptr = mlx_new_window(data->mlx_ptr, data->map_width * data->cell_size, data->map_height * data->cell_size, "So Long");
+    if (!data->win_ptr)
     {
-        free(mlx_data->mlx_ptr);
-        free(mlx_data);
-        return NULL;
+        free(data->mlx_ptr);
+        free(data);
+        return (1);
     }
 
     // Load original images
-    t_img *original_background = load_image(mlx_data->mlx_ptr, "../ressources/background_texture.xpm");
-    t_img *original_walls = load_image(mlx_data->mlx_ptr, "../ressources/wall_texture.xpm");
-    t_img *original_collectibles = load_image(mlx_data->mlx_ptr, "../ressources/collectible_texture.xpm");
-    t_img *original_player = load_image(mlx_data->mlx_ptr, "../ressources/player/player_texture.xpm");
-    t_img *original_exit = load_image(mlx_data->mlx_ptr, "../ressources/exit_texture.xpm");
+    t_img *original_background = load_image(data->mlx_ptr, "../ressources/background_texture.xpm");
+    t_img *original_walls = load_image(data->mlx_ptr, "../ressources/wall_texture.xpm");
+    t_img *original_collectibles = load_image(data->mlx_ptr, "../ressources/collectible_texture.xpm");
+    t_img *original_player = load_image(data->mlx_ptr, "../ressources/player/player_texture.xpm");
+    t_img *original_exit = load_image(data->mlx_ptr, "../ressources/exit_texture.xpm");
     
     // Resize images
-    mlx_data->background = resize_image(mlx_data->mlx_ptr, original_background, cell_size, cell_size);
-    mlx_data->walls = resize_image(mlx_data->mlx_ptr, original_walls, cell_size, cell_size);
-    mlx_data->collectibles = resize_image(mlx_data->mlx_ptr, original_collectibles, cell_size, cell_size);
-    mlx_data->player = resize_image(mlx_data->mlx_ptr, original_player, cell_size, cell_size);
-    mlx_data->exit = resize_image(mlx_data->mlx_ptr, original_exit, cell_size, cell_size);
+    data->background = resize_image(data->mlx_ptr, original_background, data->cell_size, data->cell_size);
+    data->walls = resize_image(data->mlx_ptr, original_walls, data->cell_size, data->cell_size);
+    data->collectibles = resize_image(data->mlx_ptr, original_collectibles, data->cell_size, data->cell_size);
+    data->player = resize_image(data->mlx_ptr, original_player, data->cell_size, data->cell_size);
+    data->exit = resize_image(data->mlx_ptr, original_exit, data->cell_size, data->cell_size);
     
     // Free original images
-    mlx_destroy_image(mlx_data->mlx_ptr, original_background->img_ptr);
-    mlx_destroy_image(mlx_data->mlx_ptr, original_walls->img_ptr);
-    mlx_destroy_image(mlx_data->mlx_ptr, original_collectibles->img_ptr);
-    mlx_destroy_image(mlx_data->mlx_ptr, original_player->img_ptr);
-    mlx_destroy_image(mlx_data->mlx_ptr, original_exit->img_ptr);
+    mlx_destroy_image(data->mlx_ptr, original_background->img_ptr);
+    mlx_destroy_image(data->mlx_ptr, original_walls->img_ptr);
+    mlx_destroy_image(data->mlx_ptr, original_collectibles->img_ptr);
+    mlx_destroy_image(data->mlx_ptr, original_player->img_ptr);
+    mlx_destroy_image(data->mlx_ptr, original_exit->img_ptr);
     free(original_background);
     free(original_walls);
     free(original_collectibles);
     free(original_player);
     free(original_exit);
     
-    mlx_data->map_width = map_width;
-    mlx_data->map_height = map_height;
-    mlx_data->cell_size = cell_size;
-    
-    return mlx_data;
+    return (0);
 }
 
 int	main(int argc, char *argv[])
 /* Main function */
 {
 	char	*map_path;
-	t_mlx_data *data = malloc(sizeof(t_mlx_data));
+	t_mlx_data *data;
+	int	error_catch;
+
+	data = (t_mlx_data *)malloc(sizeof(t_mlx_data));
     if (!data)
         return (EXIT_FAILURE);
 	
-	int cell_size = 64;
+	data->cell_size = 64;
 	if (argc < 2)
 	{
 		map_path = "../maps/map_default.ber";
@@ -135,30 +128,28 @@ int	main(int argc, char *argv[])
 			ft_printf("Map path doesn't exist. Default settings applied.\n");
 		}
 	}
-	int is_ok = getMapSize(&data, map_path);
-	ft_printf("%d, %d\n", data->map_width, data->map_width);
-	if (is_ok != 0)
+	error_catch = getMapSize(data, map_path);
+	if (error_catch != 0)
 		return (EXIT_FAILURE);
 	else
 	{
-		mapRead(&data, map_path);
-		//printMap(&data);
-		/*map_info = checkMap(map_info, map);
-		if (ft_strncmp(map_info.comment, "OK", 3) != 0)
-			ft_printf("%s\n", map_info.comment);
+		mapRead(data, map_path);
+		error_catch = checkMap(data);
+		if (error_catch == 1)
+			return (EXIT_FAILURE);
 		else
 		{
-			t_mlx_data *mlx_data = initGame(map_info.x, map_info.y, cell_size);
-			if (!mlx_data)
+			error_catch = initGame(data);
+			if (error_catch != 0)
 			{
-				ft_printf("Failed to initialize the game\n");
+				ft_printf("Error\nFailed to initialize the game\n");
 				return (EXIT_FAILURE);
 			}
-			render_map(mlx_data, map_info, map);
-			mlx_key_hook(mlx_data->win_ptr, handle_input, &mlx_data);
-			mlx_loop(mlx_data->mlx_ptr);
-			free(mlx_data);
-		}*/
+			render_map(data);
+			mlx_key_hook(data->win_ptr, handle_input, data);
+			mlx_loop(data->mlx_ptr);
+			free(data);
+		}
 	}
 	return (EXIT_SUCCESS);
 }

@@ -25,13 +25,13 @@ int getMapSize(t_mlx_data *data, const char *map_path)
         return (-1);
     }
 
-    x = ft_strlen(line) - 1; // Adjusted for correct length
-    free(line);
+    x = ft_strlen(line) - 2;
+    ft_free(&line);
     y = 1;
 
     while ((line = get_next_line(map_fd)) != NULL)
     {
-        free(line);
+        ft_free(&line);
         y++;
     }
 
@@ -77,7 +77,7 @@ int mapRead(t_mlx_data *data, const char *map_path)
         if (!data->map[y])
         {
             ft_printf("Error\nMemory allocation failed!\n");
-            free(line);
+            ft_free(&line);
             close(map_fd);
             return (-1);
         }
@@ -89,7 +89,7 @@ int mapRead(t_mlx_data *data, const char *map_path)
             x++;
         }
 
-        free(line);
+        ft_free(&line);
         y++;
     }
 
@@ -157,7 +157,6 @@ int main(int argc, char *argv[])
 
     printMap(data);
 
-    // Free allocated memory for the map
     for (int i = 0; i < data->map_height; i++)
     {
         free(data->map[i]);

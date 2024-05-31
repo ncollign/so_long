@@ -4,8 +4,12 @@
 */
 #include "so_long.h"
 
-Tile	checkMap(Tile map_info, const Tile map[map_info.x][map_info.y])
-/* This function checks if the map is OK and have all the specifications in the subject*/
+int	checkMap(t_mlx_data *data)
+/*
+This function checks if the map is OK and have all the specifications in the subject
+Returns 0 if OK
+Returns 1 if NOK
+*/
 {
     int	x;
 	int	y;
@@ -17,74 +21,106 @@ Tile	checkMap(Tile map_info, const Tile map[map_info.x][map_info.y])
 	hasPlayer = 0;
 	hasCollectible = 0;
 	y = 0;
-	while (y < map_info.y)
+	while (y < data->map_height)
 	{
 		x = 0;
-		while (x < map_info.x)
+		while (x < data->map_width)
 		{
-			if ((x == 0) || (x == map_info.x - 1))
+			
+			if ((x == 0) || (x == data->map_width - 1))
 			{
-				if (map[x][y].type != '1')
-					map_info.comment = "Error\nThe map is not closed with walls or is not rectangular"; // Toutes les lignes doivent être de la même longueur pour être rectangulaire
+				if (data->map[y][x].type != '1')
+				{
+					// Toutes les lignes doivent être de la même longueur pour être rectangulaire
+					ft_printf("Error\nThe map is not closed with walls or is not rectangular");
+					return (1);
+				}	 
 			}
-			if ((y == 0) || (y == map_info.y - 1))
+			if ((y == 0) || (y == data->map_height - 1))
 			{
-				if (map[x][y].type != '1')
-					map_info.comment = "Error\nThe map is not closed with walls or is not rectangular";
+				if (data->map[y][x].type != '1')
+				{
+					ft_printf("Error\nThe map is not closed with walls or is not rectangular");
+					return (1);
+				}
 			}
-			if (map[x][y].type == 'C')
+			if (data->map[y][x].type == 'C')
 				hasCollectible++;
-			if (map[x][y].type == 'P')
+			if (data->map[y][x].type == 'P')
+			{
+				data->player_x = x;
+				data->player_y = y;
 				hasPlayer++;
-			if (map[x][y].type == 'E')
+			}
+			if (data->map[y][x].type == 'E')
 				hasExit++;
 			x++;
 		}
 		y++;
 	}
 	if (hasCollectible == 0)
-		map_info.comment = "Error\nThe map must have minimum 1 item to collect";
+	{
+		ft_printf("Error\nThe map must have minimum 1 item to collect");
+		return (1);
+	}
 	if ((hasPlayer == 0) || (hasPlayer > 1))
-		map_info.comment = "Error\nThe map must have 1 player";
+	{
+		ft_printf("Error\nThe map must have 1 player");
+		return (1);
+	}
 	if ((hasExit == 0) || (hasExit > 1))
-		map_info.comment = "Error\nThe map must have 1 exit";
-	return (map_info);
+	{
+		ft_printf("Error\nThe map must have 1 exit");
+		return (1);
+	}
+	return (0);
 }
 
-int	getMapSize(t_mlx_data *data, const char *map_path)
+int getMapSize(t_mlx_data *data, const char *map_path)
 /* This function gives the size of the map */
 {
-    //Tile	size;
-    int	map_fd;
-	int	x;
-	int	y;
-    char	*line;
+    int map_fd;
+    int x;
+    int y;
+    char *line;
 
-	x = 0;
-	y = 0;
+    x = 0;
+    y = 0;
     map_fd = open(map_path, O_RDONLY);
     if (map_fd == -1)
-	{
-		ft_printf("Error\nMap file could not be open.");
-		return (-1);
-	}
-	else
-	{
-		line = get_next_line(map_fd);
-		x = ft_strlen(line) - 2;
-		y = 0;
-		while (get_next_line(map_fd) != NULL)
-			y++;
-		y++;
-		if (y < 4 || x < 4)
-		{	
-			ft_printf("Error\nThe map is too small");
-			return (-1);
-		}
-	}
+    {
+        ft_printf("Error\nMap file could not be opened.\n");
+        return (-1);
+    }
+
+    line = get_next_line(map_fd);
+    if (line == NULL)
+    {
+        ft_printf("Error\nMap file is empty or could not be read.\n");
+        close(map_fd);
+        return (-1);
+    }
+
+    x = ft_strlen(line) - 2;
+    ft_free(&line);
+    y = 1;
+
+    while ((line = get_next_line(map_fd)) != NULL)
+    {
+        ft_free(&line);
+        y++;
+    }
+
     close(map_fd);
-	data->map_width = x;
-	data->map_height = y;
+
+    if (y < 4 || x < 4)
+    {
+        ft_printf("Error\nThe map is too small.\n");
+        return (-1);
+    }
+
+    data->map_width = x;
+    data->map_height = y;
     return (0);
 }
 

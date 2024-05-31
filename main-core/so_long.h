@@ -40,13 +40,13 @@ typedef struct  s_mlx_data
 }	t_mlx_data;
 
 int	getMapSize(t_mlx_data *data, const char *map_path);
-/*int	checkMapPath(char *map_path);
-Tile	checkMap(Tile map_info, const Tile map[map_info.x][map_info.y]);
+int	checkMapPath(char *map_path);
+int	checkMap(t_mlx_data *data);
 int	handle_input(int keysym, t_mlx_data *data);
-void render_map(t_mlx_data *mlx_data, Tile map_info, const Tile map[map_info.x][map_info.y]);
+void render_map(t_mlx_data *data);
 void refresh_cell(t_mlx_data *mlx_data, int x, int y);
 t_img *resize_image(void *mlx_ptr, t_img *src_img, int new_width, int new_height);
-t_img	*load_image(void *mlx_ptr, char *path);*/
+t_img	*load_image(void *mlx_ptr, char *path);
 
 #endif
 

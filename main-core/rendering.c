@@ -73,22 +73,22 @@ void refresh_cell(t_mlx_data *mlx_data, int x, int y)
 }
 
 // Function to render the map
-void render_map(t_mlx_data *mlx_data, Tile map_info, const Tile map[map_info.x][map_info.y]) // A revoir
+void render_map(t_mlx_data *data) // A revoir
 {
-    for (int y = 0; y < mlx_data->map_height; y++)
+    for (int y = 0; y < data->map_height; y++)
     {
-        for (int x = 0; x < mlx_data->map_width; x++)
+        for (int x = 0; x < data->map_width; x++)
         {
-            if (map[x][y].type == '1') // Wall
-                mlx_put_image_to_window(mlx_data->mlx_ptr, mlx_data->win_ptr, mlx_data->walls->img_ptr, x * mlx_data->cell_size, y * mlx_data->cell_size);
-            else if (map[x][y].type == 'C') // Collectible
-                mlx_put_image_to_window(mlx_data->mlx_ptr, mlx_data->win_ptr, mlx_data->collectibles->img_ptr, x * mlx_data->cell_size, y * mlx_data->cell_size);
-            else if (map[x][y].type == 'P') // Player
-                mlx_put_image_to_window(mlx_data->mlx_ptr, mlx_data->win_ptr, mlx_data->player->img_ptr, x * mlx_data->cell_size, y * mlx_data->cell_size);
-            else if (map[x][y].type == 'E') // Exit
-                mlx_put_image_to_window(mlx_data->mlx_ptr, mlx_data->win_ptr, mlx_data->exit->img_ptr, x * mlx_data->cell_size, y * mlx_data->cell_size);
+            if (data->map[y][x].type == '1') // Wall
+                mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->walls->img_ptr, x * data->cell_size, y * data->cell_size);
+            else if (data->map[y][x].type == 'C') // Collectible
+                mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->collectibles->img_ptr, x * data->cell_size, y * data->cell_size);
+            else if (data->map[y][x].type == 'P') // Player
+                mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->player->img_ptr, x * data->cell_size, y * data->cell_size);
+            else if (data->map[y][x].type == 'E') // Exit
+                mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->exit->img_ptr, x * data->cell_size, y * data->cell_size);
             else // Background
-                mlx_put_image_to_window(mlx_data->mlx_ptr, mlx_data->win_ptr, mlx_data->background->img_ptr, x * mlx_data->cell_size, y * mlx_data->cell_size);
+                mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->background->img_ptr, x * data->cell_size, y * data->cell_size);
         }
     }
 }
