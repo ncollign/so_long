@@ -1,16 +1,40 @@
 #include "so_long.h"
 
-void	player_move(t_mlx_data *data, int dest_x, int dest_y)
+int	player_win(t_mlx_data *data)
 {
-	if (data->map[dest_y][dest_x].type != '1')
+	ft_printf("%d, %d\n", data->collectible_count, data->score);
+	if (data->collectible_count == data->score)
 	{
+		ft_printf("Congratulations ! You won !\n");
+		return (0);
+	}
+	else
+	{
+		ft_printf("You need to collect all the items before exit :(\n");
+		return (1);
+	}
+}
+
+void	player_move(t_mlx_data *data, int dest_x, int dest_y)
+/*
+	This function move the player in the data and update display
+	Increase score if the player hits a collectible
+*/
+{
+	if (data->map[dest_y][dest_x].type != '1' && data->map[dest_y][dest_x].type != 'E')
+	{
+		if (data->map[dest_y][dest_x].type == 'C')
+			data->score++;
 		data->map[data->player_y][data->player_x].type = '0';
 		refresh_cell(data, data->player_x, data->player_y);
 		data->player_x = dest_x;
         data->player_y = dest_y;
         data->map[data->player_y][data->player_x].type = 'P';
         refresh_cell(data, data->player_x, data->player_y);
+		data->move_count++;
 	}
+	if ((data->map[dest_y][dest_x].type == 'E') && (player_win(data) == 0))
+			exit_game(data);
 }
 
 int	handle_input(int keysym, t_mlx_data *data)
@@ -21,13 +45,7 @@ int	handle_input(int keysym, t_mlx_data *data)
 	dest_y = data->player_y;
 	dest_x = data->player_x;
 	if (keysym == XK_Escape)
-	{
-		ft_printf("Closing the window...");
-		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
-		mlx_destroy_display(data->mlx_ptr);
-		free(data->mlx_ptr);
-		exit(1);
-	}
+		exit_game(data);
 	else if (keysym == XK_Up)
 	{
 		ft_printf("HAUT\n");

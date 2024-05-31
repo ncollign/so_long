@@ -73,7 +73,7 @@ void refresh_cell(t_mlx_data *mlx_data, int x, int y)
 }
 
 // Function to render the map
-void render_map(t_mlx_data *data) // A revoir
+void	render_map(t_mlx_data *data)
 {
     for (int y = 0; y < data->map_height; y++)
     {
@@ -91,4 +91,26 @@ void render_map(t_mlx_data *data) // A revoir
                 mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->background->img_ptr, x * data->cell_size, y * data->cell_size);
         }
     }
+}
+
+void	exit_game(t_mlx_data *data)
+{
+	int		i;
+	
+	ft_printf("Closing the window...");
+	mlx_destroy_window(data->mlx_ptr, data->win_ptr);
+	mlx_destroy_display(data->mlx_ptr);
+	free(data->mlx_ptr);
+	
+
+    // Libérez la carte si elle a été allouée dynamiquement
+	i = 0;
+	while (data->map[i] != NULL)
+	{
+		free(data->map[i]);
+		i++;
+	}
+	free(data->map);
+	data->map = NULL;
+    free(data);
 }

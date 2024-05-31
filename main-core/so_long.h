@@ -3,7 +3,7 @@
 # include <fcntl.h>
 # include <X11/keysym.h>
 # include "../libft/libft.h"
-#include "../minilibx-linux/mlx.h"
+# include "../minilibx_linux/mlx.h"
 
 typedef	struct
 {
@@ -37,6 +37,8 @@ typedef struct  s_mlx_data
     int         player_y;
     Tile        **map;
     int         move_count;
+	int			collectible_count;
+	int			score;
 }	t_mlx_data;
 
 int	getMapSize(t_mlx_data *data, const char *map_path);
@@ -47,6 +49,7 @@ void render_map(t_mlx_data *data);
 void refresh_cell(t_mlx_data *mlx_data, int x, int y);
 t_img *resize_image(void *mlx_ptr, t_img *src_img, int new_width, int new_height);
 t_img	*load_image(void *mlx_ptr, char *path);
+void	exit_game(t_mlx_data *data);
 
 #endif
 

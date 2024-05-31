@@ -13,20 +13,17 @@ Returns 1 if NOK
 {
     int	x;
 	int	y;
-	int	hasCollectible;
 	int	hasPlayer;
 	int hasExit;
 
 	hasExit = 0;
 	hasPlayer = 0;
-	hasCollectible = 0;
 	y = 0;
 	while (y < data->map_height)
 	{
 		x = 0;
 		while (x < data->map_width)
 		{
-			
 			if ((x == 0) || (x == data->map_width - 1))
 			{
 				if (data->map[y][x].type != '1')
@@ -45,7 +42,7 @@ Returns 1 if NOK
 				}
 			}
 			if (data->map[y][x].type == 'C')
-				hasCollectible++;
+				data->collectible_count++;
 			if (data->map[y][x].type == 'P')
 			{
 				data->player_x = x;
@@ -58,7 +55,7 @@ Returns 1 if NOK
 		}
 		y++;
 	}
-	if (hasCollectible == 0)
+	if (data->collectible_count == 0)
 	{
 		ft_printf("Error\nThe map must have minimum 1 item to collect");
 		return (1);

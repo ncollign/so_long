@@ -53,14 +53,12 @@ int initGame(t_mlx_data *data)
 {
     if (!data)
         return (1);
-    
     data->mlx_ptr = mlx_init();
     if (!data->mlx_ptr)
     {
         free(data);
         return (1);
     }
-    
     data->win_ptr = mlx_new_window(data->mlx_ptr, data->map_width * data->cell_size, data->map_height * data->cell_size, "So Long");
     if (!data->win_ptr)
     {
@@ -68,7 +66,6 @@ int initGame(t_mlx_data *data)
         free(data);
         return (1);
     }
-
     // Load original images
     t_img *original_background = load_image(data->mlx_ptr, "../ressources/background_texture.xpm");
     t_img *original_walls = load_image(data->mlx_ptr, "../ressources/wall_texture.xpm");
@@ -108,8 +105,10 @@ int	main(int argc, char *argv[])
 	data = (t_mlx_data *)malloc(sizeof(t_mlx_data));
     if (!data)
         return (EXIT_FAILURE);
-	
 	data->cell_size = 64;
+	data->move_count = 0;
+	data->score = 0;
+	data->collectible_count = 0;
 	if (argc < 2)
 	{
 		map_path = "../maps/map_default.ber";
