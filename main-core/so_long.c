@@ -146,7 +146,7 @@ int	main(int argc, char *argv[])
 				return (EXIT_FAILURE);
 			}
 			render_map(data);
-			mlx_key_hook(data->win_ptr, handle_input, data);
+			mlx_key_hook(data->win_ptr, (int (*)())handle_input, data);
 			mlx_loop(data->mlx_ptr);
 			free(data);
 		}
