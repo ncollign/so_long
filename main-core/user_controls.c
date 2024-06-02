@@ -2,7 +2,6 @@
 
 int	player_win(t_mlx_data *data)
 {
-	ft_printf("%d, %d\n", data->collectible_count, data->score);
 	if (data->collectible_count == data->score)
 	{
 		ft_printf("Congratulations ! You won !\n");
