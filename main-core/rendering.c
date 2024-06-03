@@ -64,19 +64,19 @@ t_img *resize_image(void *mlx_ptr, t_img *src_img, int new_width, int new_height
 }
 
 
-void refresh_cell(t_mlx_data *mlx_data, int x, int y)
+void refresh_cell(t_mlx_data *data, int x, int y)
 /* This function refreshes a cell on the display */
 {
-    if (mlx_data->map[y][x].type == '1')
-        mlx_put_image_to_window(mlx_data->mlx_ptr, mlx_data->win_ptr, mlx_data->walls->image, x * mlx_data->cell_size, y * mlx_data->cell_size);
-    else if (mlx_data->map[y][x].type == 'C')
-        mlx_put_image_to_window(mlx_data->mlx_ptr, mlx_data->win_ptr, mlx_data->collectibles->image, x * mlx_data->cell_size, y * mlx_data->cell_size);
-    else if (mlx_data->map[y][x].type == 'P')
-        mlx_put_image_to_window(mlx_data->mlx_ptr, mlx_data->win_ptr, mlx_data->player->image, x * mlx_data->cell_size, y * mlx_data->cell_size);
-    else if (mlx_data->map[y][x].type == 'E')
-        mlx_put_image_to_window(mlx_data->mlx_ptr, mlx_data->win_ptr, mlx_data->exit->image, x * mlx_data->cell_size, y * mlx_data->cell_size);
+    if (data->map[y][x].type == '1')
+        mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->walls->image, x * data->cell_size, y * data->cell_size);
+    else if (data->map[y][x].type == 'C')
+        mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->collectibles->image, x * data->cell_size, y * data->cell_size);
+    else if (data->map[y][x].type == 'P')
+        mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->player->image, x * data->cell_size, y * data->cell_size);
+    else if (data->map[y][x].type == 'E' && data->exit_info->exit_visibility == 1)
+        mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->exit->image, x * data->cell_size, y * data->cell_size);
     else
-        mlx_put_image_to_window(mlx_data->mlx_ptr, mlx_data->win_ptr, mlx_data->background->image, x * mlx_data->cell_size, y * mlx_data->cell_size);
+        mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->background->image, x * data->cell_size, y * data->cell_size);
 }
 
 
@@ -87,15 +87,18 @@ void	render_map(t_mlx_data *data)
     {
         for (int x = 0; x < data->map_width; x++)
         {
-            if (data->map[y][x].type == '1') // Wall
+            if (data->map[y][x].type == '1')
                 mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->walls->image, x * data->cell_size, y * data->cell_size);
-            else if (data->map[y][x].type == 'C') // Collectible
+            else if (data->map[y][x].type == 'C')
                 mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->collectibles->image, x * data->cell_size, y * data->cell_size);
-            else if (data->map[y][x].type == 'P') // Player
-                mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->player->image, x * data->cell_size, y * data->cell_size);
-            else if (data->map[y][x].type == 'E') // Exit
+            else if (data->map[y][x].type == 'P')
+            {
+				mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->player->image, x * data->cell_size, y * data->cell_size);
+				ft_printf("OK\n");
+			}
+            else if (data->map[y][x].type == 'E' && data->exit_info->exit_visibility == 1)
                 mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->exit->image, x * data->cell_size, y * data->cell_size);
-            else // Background
+            else
                 mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->background->image, x * data->cell_size, y * data->cell_size);
         }
     }

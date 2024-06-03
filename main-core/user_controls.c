@@ -14,6 +14,15 @@ int	player_win(t_mlx_data *data)
 	}
 }
 
+void	exit_appear(t_mlx_data *data)
+{
+	if (data->collectible_count == data->score)
+	{
+		data->exit_info->exit_visibility = 1;
+		refresh_cell(data, data->exit_info->exit_x, data->exit_info->exit_y);
+	}
+}
+
 void	player_move(t_mlx_data *data, int dest_x, int dest_y)
 /*
 	This function move the player in the data and update display
@@ -23,7 +32,10 @@ void	player_move(t_mlx_data *data, int dest_x, int dest_y)
 	if (data->map[dest_y][dest_x].type != '1' && data->map[dest_y][dest_x].type != 'E')
 	{
 		if (data->map[dest_y][dest_x].type == 'C')
+		{
 			data->score++;
+			exit_appear(data);
+		}
 		data->map[data->player_y][data->player_x].type = '0';
 		refresh_cell(data, data->player_x, data->player_y);
 		data->player_x = dest_x;

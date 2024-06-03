@@ -6,21 +6,17 @@
 # include "../minilibx_linux/mlx.h"
 # include "../minilibx_linux/mlx_int.h"
 
-typedef	struct
+typedef	struct	s_Tile
 {
 	char	type;
 }	Tile;
 
-/*typedef struct  s_img
+typedef	struct	s_exit_info
 {
-    void        *img_ptr;
-    char        *data;
-    int         width;
-    int         height;
-    int         bpp;
-    int         size_line;
-    int         endian;
-}	t_img;*/
+	int		exit_visibility;
+	int		exit_x;
+	int		exit_y;
+}	t_exit_info;
 
 typedef struct  s_mlx_data
 {
@@ -31,6 +27,7 @@ typedef struct  s_mlx_data
     t_img       *collectibles;
     t_img       *player;
     t_img       *exit;
+	t_exit_info	*exit_info;
     int         map_width;
     int         map_height;
     int         cell_size;

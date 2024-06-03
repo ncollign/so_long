@@ -43,14 +43,18 @@ Returns 1 if NOK
 			}
 			if (data->map[y][x].type == 'C')
 				data->collectible_count++;
-			if (data->map[y][x].type == 'P')
+			else if (data->map[y][x].type == 'P')
 			{
 				data->player_x = x;
 				data->player_y = y;
 				hasPlayer++;
 			}
-			if (data->map[y][x].type == 'E')
+			else if (data->map[y][x].type == 'E')
+			{
+				data->exit_info->exit_x = x;
+				data->exit_info->exit_y = y;
 				hasExit++;
+			}
 			x++;
 		}
 		y++;
@@ -88,7 +92,6 @@ void	getMapSize(t_mlx_data *data, const char *map_path)
         ft_printf("Error\nMap file could not be opened.\n");
         exit_game(data, 1);
     }
-
     line = get_next_line(map_fd);
     if (line == NULL)
     {
