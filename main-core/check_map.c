@@ -51,8 +51,8 @@ Returns 1 if NOK
 			}
 			else if (data->map[y][x].type == 'E')
 			{
-				data->exit_info->exit_x = x;
-				data->exit_info->exit_y = y;
+				data->exit_info.exit_x = x;
+				data->exit_info.exit_y = y;
 				hasExit++;
 			}
 			x++;

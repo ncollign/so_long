@@ -21,7 +21,6 @@ int mapRead(t_mlx_data *data, const char *map_path)
         close(map_fd);
         return (-1);
     }
-
     y = 0;
     while ((line = get_next_line(map_fd)) != NULL && y < data->map_height)
     {
@@ -72,7 +71,8 @@ void initGame(t_mlx_data *data)
 	data->move_count = 0;
 	data->score = 0;
 	data->collectible_count = 0;
-	data->exit_info->exit_visibility = 0;
+	data->exit_info.exit_visibility = 0;
+	data->exit_info.win = 0;
 	data->win_ptr = mlx_new_window(data->mlx_ptr, data->map_width * data->cell_size, data->map_height * data->cell_size, "So_Long");
 	if (!data->win_ptr)
 	{
@@ -117,11 +117,9 @@ int	main(int argc, char *argv[])
 	}
 	else
 	{
-		if (checkMapPath(argv[1]))
-			{
-				map_path = argv[1];
+		map_path = ft_strjoin("../maps/", argv[1]);
+		if (checkMapPath(map_path))
 				ft_printf("Map path saved.\n");
-			}
 		else
 		{
 			map_path = "../maps/map_default.ber";

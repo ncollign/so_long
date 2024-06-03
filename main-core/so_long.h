@@ -16,6 +16,7 @@ typedef	struct	s_exit_info
 	int		exit_visibility;
 	int		exit_x;
 	int		exit_y;
+	int		win;
 }	t_exit_info;
 
 typedef struct  s_mlx_data
@@ -27,7 +28,7 @@ typedef struct  s_mlx_data
     t_img       *collectibles;
     t_img       *player;
     t_img       *exit;
-	t_exit_info	*exit_info;
+	t_exit_info	exit_info;
     int         map_width;
     int         map_height;
     int         cell_size;
@@ -48,6 +49,8 @@ void refresh_cell(t_mlx_data *mlx_data, int x, int y);
 t_img *resize_image(void *mlx_ptr, t_img *src_img, int new_width, int new_height);
 t_img	*load_image(void *mlx_ptr, char *path);
 void	exit_game(t_mlx_data *data, int error_catch);
+t_img *create_image(void *mlx_ptr, int width, int height);
+void	print_message(t_mlx_data *data, char	*message, int x, int y);
 
 #endif
 

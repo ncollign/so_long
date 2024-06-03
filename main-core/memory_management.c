@@ -34,3 +34,41 @@ void	exit_game(t_mlx_data *data, int	error_catch)
 	}
 	exit (error_catch);
 }
+
+t_img	*load_image(void *mlx_ptr, char *path)
+/*
+	This function loads an image into the memory
+*/
+{
+    t_img *img = malloc(sizeof(t_img));
+    if (!img)
+        return (NULL);
+    img->image = mlx_xpm_file_to_image(mlx_ptr, path, &img->width, &img->height);
+    if (!img->image)
+    {
+        free(img);
+        return (NULL);
+    }
+    img->data = mlx_get_data_addr(img->image, &img->bpp, &img->size_line, &img->format);
+    return (img);
+}
+
+t_img *create_image(void *mlx_ptr, int width, int height)
+/*
+	This function creates an image
+*/
+{
+    t_img *img = malloc(sizeof(t_img));
+    if (!img)
+        return (NULL);
+    img->image = mlx_new_image(mlx_ptr, width, height);
+    if (!img->image)
+    {
+        free(img);
+		return (NULL);
+    }
+    img->data = mlx_get_data_addr(img->image, &img->bpp, &img->size_line, &img->format);
+    img->width = width;
+    img->height = height;
+    return img;
+}
