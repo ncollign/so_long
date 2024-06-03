@@ -21,8 +21,10 @@ void	exit_game(t_mlx_data *data, int	error_catch)
 		mlx_destroy_image(data->mlx_ptr, data->walls->image);
 	if (data->collectibles != NULL)
 		mlx_destroy_image(data->mlx_ptr, data->collectibles->image);
-	if (data->player != NULL)
-		mlx_destroy_image(data->mlx_ptr, data->player->image);
+	if (data->player1 != NULL)
+		mlx_destroy_image(data->mlx_ptr, data->player1->image);
+	if (data->player2 != NULL)
+		mlx_destroy_image(data->mlx_ptr, data->player2->image);
 	if (data->exit != NULL)
 		mlx_destroy_image(data->mlx_ptr, data->exit->image);
 	if (data->win_ptr != NULL)
@@ -71,4 +73,47 @@ t_img *create_image(void *mlx_ptr, int width, int height)
     img->width = width;
     img->height = height;
     return img;
+}
+
+void	init_display(t_mlx_data *data)
+{
+	t_img *original_background;
+    t_img *original_walls;
+    t_img *original_collectibles;
+    t_img *original_player1;
+	t_img *original_player2;
+    t_img *original_exit;
+
+	data->win_ptr = mlx_new_window(data->mlx_ptr, data->map_width * data->cell_size, data->map_height * data->cell_size, "So_Long");
+	if (!data->win_ptr)
+	{
+		ft_printf("Error\nFailed to create a window\n");
+		exit_game(data, 1);
+	}
+	original_background = load_image(data->mlx_ptr, "../ressources/background_texture.xpm");
+	original_walls = load_image(data->mlx_ptr, "../ressources/wall_texture.xpm");
+	original_collectibles = load_image(data->mlx_ptr, "../ressources/collectible_texture.xpm");
+	original_player1 = load_image(data->mlx_ptr, "../ressources/player/player_texture1.xpm");
+	original_player2 = load_image(data->mlx_ptr, "../ressources/player/player_texture2.xpm");
+	original_exit = load_image(data->mlx_ptr, "../ressources/exit_texture.xpm");
+	if (original_background == NULL || original_walls == NULL || original_collectibles == NULL || original_player1 == NULL || original_player2 == NULL || original_exit == NULL)
+		exit_game(data, 1);
+	data->background = resize_image(data->mlx_ptr, original_background, data->cell_size, data->cell_size);
+	data->walls = resize_image(data->mlx_ptr, original_walls, data->cell_size, data->cell_size);
+	data->collectibles = resize_image(data->mlx_ptr, original_collectibles, data->cell_size, data->cell_size);
+	data->player1 = resize_image(data->mlx_ptr, original_player1, data->cell_size, data->cell_size);
+	data->player2 = resize_image(data->mlx_ptr, original_player2, data->cell_size, data->cell_size);
+	data->exit = resize_image(data->mlx_ptr, original_exit, data->cell_size, data->cell_size);
+	mlx_destroy_image(data->mlx_ptr, original_background->image);
+	mlx_destroy_image(data->mlx_ptr, original_walls->image);
+	mlx_destroy_image(data->mlx_ptr, original_collectibles->image);
+	mlx_destroy_image(data->mlx_ptr, original_player1->image);
+	mlx_destroy_image(data->mlx_ptr, original_player2->image);
+	mlx_destroy_image(data->mlx_ptr, original_exit->image);
+	free(original_background);
+	free(original_walls);
+    free(original_collectibles);
+    free(original_player1);
+	free(original_player2);
+    free(original_exit);
 }

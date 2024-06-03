@@ -50,12 +50,6 @@ int mapRead(t_mlx_data *data, const char *map_path)
 void initGame(t_mlx_data *data)
 /* This function initialize the game */
 {
-	t_img *original_background;
-    t_img *original_walls;
-    t_img *original_collectibles;
-    t_img *original_player;
-    t_img *original_exit;
-
     if (!data)
 	{
 		ft_printf("Error\nData is not defined\n");
@@ -73,32 +67,7 @@ void initGame(t_mlx_data *data)
 	data->collectible_count = 0;
 	data->exit_info.exit_visibility = 0;
 	data->exit_info.win = 0;
-	data->win_ptr = mlx_new_window(data->mlx_ptr, data->map_width * data->cell_size, data->map_height * data->cell_size, "So_Long");
-	if (!data->win_ptr)
-	{
-		ft_printf("Error\nFailed to create a window\n");
-		exit_game(data, 1);
-	}
-	original_background = load_image(data->mlx_ptr, "../ressources/background_texture.xpm");
-	original_walls = load_image(data->mlx_ptr, "../ressources/wall_texture.xpm");
-	original_collectibles = load_image(data->mlx_ptr, "../ressources/collectible_texture.xpm");
-	original_player = load_image(data->mlx_ptr, "../ressources/player/player_texture.xpm");
-	original_exit = load_image(data->mlx_ptr, "../ressources/exit_texture.xpm");
-	data->background = resize_image(data->mlx_ptr, original_background, data->cell_size, data->cell_size);
-	data->walls = resize_image(data->mlx_ptr, original_walls, data->cell_size, data->cell_size);
-	data->collectibles = resize_image(data->mlx_ptr, original_collectibles, data->cell_size, data->cell_size);
-	data->player = resize_image(data->mlx_ptr, original_player, data->cell_size, data->cell_size);
-	data->exit = resize_image(data->mlx_ptr, original_exit, data->cell_size, data->cell_size);
-	mlx_destroy_image(data->mlx_ptr, original_background->image);
-	mlx_destroy_image(data->mlx_ptr, original_walls->image);
-	mlx_destroy_image(data->mlx_ptr, original_collectibles->image);
-	mlx_destroy_image(data->mlx_ptr, original_player->image);
-	mlx_destroy_image(data->mlx_ptr, original_exit->image);
-	free(original_background);
-	free(original_walls);
-    free(original_collectibles);
-    free(original_player);
-    free(original_exit);
+	init_display(data);
 }
 
 int	main(int argc, char *argv[])
