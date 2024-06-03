@@ -33,7 +33,7 @@ void	player_move(t_mlx_data *data, int dest_x, int dest_y)
 		data->move_count++;
 	}
 	if ((data->map[dest_y][dest_x].type == 'E') && (player_win(data) == 0))
-			exit_game(data);
+			exit_game(data, 1);
 }
 
 int	handle_input(int keysym, t_mlx_data *data)
@@ -44,27 +44,15 @@ int	handle_input(int keysym, t_mlx_data *data)
 	dest_y = data->player_y;
 	dest_x = data->player_x;
 	if (keysym == XK_Escape)
-		exit_game(data);
+		exit_game(data, 1);
 	else if (keysym == XK_Up)
-	{
-		ft_printf("HAUT\n");
 		dest_y -= 1;
-	}
 	else if (keysym == XK_Down)
-	{
-		ft_printf("BAS\n");
 		dest_y += 1;
-	}
 	else if (keysym == XK_Left)
-	{
-		ft_printf("GAUCHE\n");
 		dest_x -= 1;
-	}
 	else if (keysym == XK_Right)
-	{
-		ft_printf("DROITE\n");
 		dest_x += 1;
-	}
 	if (dest_x != data->player_x || dest_y != data->player_y)
 		player_move(data, dest_x, dest_y);
 	return (0);

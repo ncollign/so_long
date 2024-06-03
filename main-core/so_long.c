@@ -48,51 +48,56 @@ int mapRead(t_mlx_data *data, const char *map_path)
     return (0);
 }
 
-int initGame(t_mlx_data *data)
+void initGame(t_mlx_data *data)
 /* This function initialize the game */
 {
+	t_img *original_background;
+    t_img *original_walls;
+    t_img *original_collectibles;
+    t_img *original_player;
+    t_img *original_exit;
+
     if (!data)
-        return (1);
-    data->mlx_ptr = mlx_init();
-    if (!data->mlx_ptr)
-    {
-        free(data);
-        return (1);
-    }
-    data->win_ptr = mlx_new_window(data->mlx_ptr, data->map_width * data->cell_size, data->map_height * data->cell_size, "So Long");
-    if (!data->win_ptr)
-    {
-        free(data->mlx_ptr);
-        free(data);
-        return (1);
-    }
-    // Load original images
-    t_img *original_background = load_image(data->mlx_ptr, "../ressources/background_texture.xpm");
-    t_img *original_walls = load_image(data->mlx_ptr, "../ressources/wall_texture.xpm");
-    t_img *original_collectibles = load_image(data->mlx_ptr, "../ressources/collectible_texture.xpm");
-    t_img *original_player = load_image(data->mlx_ptr, "../ressources/player/player_texture.xpm");
-    t_img *original_exit = load_image(data->mlx_ptr, "../ressources/exit_texture.xpm");
-    
-    // Resize images
-    data->background = resize_image(data->mlx_ptr, original_background, data->cell_size, data->cell_size);
-    data->walls = resize_image(data->mlx_ptr, original_walls, data->cell_size, data->cell_size);
-    data->collectibles = resize_image(data->mlx_ptr, original_collectibles, data->cell_size, data->cell_size);
-    data->player = resize_image(data->mlx_ptr, original_player, data->cell_size, data->cell_size);
-    data->exit = resize_image(data->mlx_ptr, original_exit, data->cell_size, data->cell_size);
-    
-    // Free original images
-    mlx_destroy_image(data->mlx_ptr, original_background->img_ptr);
-    mlx_destroy_image(data->mlx_ptr, original_walls->img_ptr);
-    mlx_destroy_image(data->mlx_ptr, original_collectibles->img_ptr);
-    mlx_destroy_image(data->mlx_ptr, original_player->img_ptr);
-    mlx_destroy_image(data->mlx_ptr, original_exit->img_ptr);
-    free(original_background);
-    free(original_walls);
+	{
+		ft_printf("Error\nData is not defined\n");
+		exit_game(data, 1);
+	}
+	data->mlx_ptr = mlx_init();
+	if (!data->mlx_ptr)
+	{
+		ft_printf("Error\nFailed to initialize MinilibX\n");
+		exit_game(data, 1);
+	}
+	data->cell_size = 64;
+	data->move_count = 0;
+	data->score = 0;
+	data->collectible_count = 0;
+	data->win_ptr = mlx_new_window(data->mlx_ptr, data->map_width * data->cell_size, data->map_height * data->cell_size, "So_Long");
+	if (!data->win_ptr)
+	{
+		ft_printf("Error\nFailed to create a window\n");
+		exit_game(data, 1);
+	}
+	original_background = load_image(data->mlx_ptr, "../ressources/background_texture.xpm");
+	original_walls = load_image(data->mlx_ptr, "../ressources/wall_texture.xpm");
+	original_collectibles = load_image(data->mlx_ptr, "../ressources/collectible_texture.xpm");
+	original_player = load_image(data->mlx_ptr, "../ressources/player/player_texture.xpm");
+	original_exit = load_image(data->mlx_ptr, "../ressources/exit_texture.xpm");
+	data->background = resize_image(data->mlx_ptr, original_background, data->cell_size, data->cell_size);
+	data->walls = resize_image(data->mlx_ptr, original_walls, data->cell_size, data->cell_size);
+	data->collectibles = resize_image(data->mlx_ptr, original_collectibles, data->cell_size, data->cell_size);
+	data->player = resize_image(data->mlx_ptr, original_player, data->cell_size, data->cell_size);
+	data->exit = resize_image(data->mlx_ptr, original_exit, data->cell_size, data->cell_size);
+	mlx_destroy_image(data->mlx_ptr, original_background->image);
+	mlx_destroy_image(data->mlx_ptr, original_walls->image);
+	mlx_destroy_image(data->mlx_ptr, original_collectibles->image);
+	mlx_destroy_image(data->mlx_ptr, original_player->image);
+	mlx_destroy_image(data->mlx_ptr, original_exit->image);
+	free(original_background);
+	free(original_walls);
     free(original_collectibles);
     free(original_player);
     free(original_exit);
-    
-    return (0);
 }
 
 int	main(int argc, char *argv[])
@@ -100,15 +105,10 @@ int	main(int argc, char *argv[])
 {
 	char	*map_path;
 	t_mlx_data *data;
-	int	error_catch;
 
 	data = (t_mlx_data *)malloc(sizeof(t_mlx_data));
     if (!data)
-        return (EXIT_FAILURE);
-	data->cell_size = 64;
-	data->move_count = 0;
-	data->score = 0;
-	data->collectible_count = 0;
+		return (EXIT_FAILURE);
 	if (argc < 2)
 	{
 		map_path = "../maps/map_default.ber";
@@ -127,28 +127,12 @@ int	main(int argc, char *argv[])
 			ft_printf("Map path doesn't exist. Default settings applied.\n");
 		}
 	}
-	error_catch = getMapSize(data, map_path);
-	if (error_catch != 0)
-		return (EXIT_FAILURE);
-	else
-	{
-		mapRead(data, map_path);
-		error_catch = checkMap(data);
-		if (error_catch == 1)
-			return (EXIT_FAILURE);
-		else
-		{
-			error_catch = initGame(data);
-			if (error_catch != 0)
-			{
-				ft_printf("Error\nFailed to initialize the game\n");
-				return (EXIT_FAILURE);
-			}
-			render_map(data);
-			mlx_key_hook(data->win_ptr, (int (*)())handle_input, data);
-			mlx_loop(data->mlx_ptr);
-			free(data);
-		}
-	}
+	getMapSize(data, map_path);
+	mapRead(data, map_path);
+	initGame(data);
+	checkMap(data);
+	render_map(data);
+	mlx_key_hook(data->win_ptr, (int (*)())handle_input, data);
+	mlx_loop(data->mlx_ptr);
 	return (EXIT_SUCCESS);
 }

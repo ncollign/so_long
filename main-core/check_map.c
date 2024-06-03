@@ -4,7 +4,7 @@
 */
 #include "so_long.h"
 
-int	checkMap(t_mlx_data *data)
+void	checkMap(t_mlx_data *data)
 /*
 This function checks if the map is OK and have all the specifications in the subject
 Returns 0 if OK
@@ -30,15 +30,15 @@ Returns 1 if NOK
 				{
 					// Toutes les lignes doivent être de la même longueur pour être rectangulaire
 					ft_printf("Error\nThe map is not closed with walls or is not rectangular");
-					return (1);
+					exit_game(data, 1);
 				}	 
 			}
 			if ((y == 0) || (y == data->map_height - 1))
 			{
 				if (data->map[y][x].type != '1')
 				{
-					ft_printf("Error\nThe map is not closed with walls or is not rectangular");
-					return (1);
+					ft_printf("Error\nThe map is not closed with walls or is not rectangular\n");
+					exit_game(data, 1);
 				}
 			}
 			if (data->map[y][x].type == 'C')
@@ -57,23 +57,22 @@ Returns 1 if NOK
 	}
 	if (data->collectible_count == 0)
 	{
-		ft_printf("Error\nThe map must have minimum 1 item to collect");
-		return (1);
+		ft_printf("Error\nThe map must have minimum 1 item to collect\n");
+		exit_game(data, 1);
 	}
 	if ((hasPlayer == 0) || (hasPlayer > 1))
 	{
-		ft_printf("Error\nThe map must have 1 player");
-		return (1);
+		ft_printf("Error\nThe map must have 1 player\n");
+		exit_game(data, 1);
 	}
 	if ((hasExit == 0) || (hasExit > 1))
 	{
-		ft_printf("Error\nThe map must have 1 exit");
-		return (1);
+		ft_printf("Error\nThe map must have 1 exit\n");
+		exit_game(data, 1);
 	}
-	return (0);
 }
 
-int getMapSize(t_mlx_data *data, const char *map_path)
+void	getMapSize(t_mlx_data *data, const char *map_path)
 /* This function gives the size of the map */
 {
     int map_fd;
@@ -87,7 +86,7 @@ int getMapSize(t_mlx_data *data, const char *map_path)
     if (map_fd == -1)
     {
         ft_printf("Error\nMap file could not be opened.\n");
-        return (-1);
+        exit_game(data, 1);
     }
 
     line = get_next_line(map_fd);
@@ -95,30 +94,24 @@ int getMapSize(t_mlx_data *data, const char *map_path)
     {
         ft_printf("Error\nMap file is empty or could not be read.\n");
         close(map_fd);
-        return (-1);
+        exit_game(data, 1);
     }
-
     x = ft_strlen(line) - 2;
     ft_free(&line);
     y = 1;
-
     while ((line = get_next_line(map_fd)) != NULL)
     {
         ft_free(&line);
         y++;
     }
-
     close(map_fd);
-
     if (y < 4 || x < 4)
     {
         ft_printf("Error\nThe map is too small.\n");
-        return (-1);
+        exit_game(data, 1);
     }
-
     data->map_width = x;
     data->map_height = y;
-    return (0);
 }
 
 int	checkMapPath(char *map_path)

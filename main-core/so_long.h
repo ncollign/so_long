@@ -4,13 +4,14 @@
 # include <X11/keysym.h>
 # include "../libft/libft.h"
 # include "../minilibx_linux/mlx.h"
+# include "../minilibx_linux/mlx_int.h"
 
 typedef	struct
 {
 	char	type;
 }	Tile;
 
-typedef struct  s_img
+/*typedef struct  s_img
 {
     void        *img_ptr;
     char        *data;
@@ -19,7 +20,7 @@ typedef struct  s_img
     int         bpp;
     int         size_line;
     int         endian;
-}	t_img;
+}	t_img;*/
 
 typedef struct  s_mlx_data
 {
@@ -41,15 +42,15 @@ typedef struct  s_mlx_data
 	int			score;
 }	t_mlx_data;
 
-int	getMapSize(t_mlx_data *data, const char *map_path);
+void	getMapSize(t_mlx_data *data, const char *map_path);
 int	checkMapPath(char *map_path);
-int	checkMap(t_mlx_data *data);
+void	checkMap(t_mlx_data *data);
 int	handle_input(int keysym, t_mlx_data *data);
 void render_map(t_mlx_data *data);
 void refresh_cell(t_mlx_data *mlx_data, int x, int y);
 t_img *resize_image(void *mlx_ptr, t_img *src_img, int new_width, int new_height);
 t_img	*load_image(void *mlx_ptr, char *path);
-void	exit_game(t_mlx_data *data);
+void	exit_game(t_mlx_data *data, int error_catch);
 
 #endif
 
