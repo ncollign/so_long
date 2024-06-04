@@ -115,6 +115,7 @@ void	getMapSize(t_mlx_data *data, const char *map_path)
     }
     data->map_width = x;
     data->map_height = y;
+	//ft_printf("%d, %d\n", data->map_height, data->map_width);
 }
 
 int	checkMapPath(char *map_path)

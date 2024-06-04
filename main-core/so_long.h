@@ -29,6 +29,7 @@ typedef struct  s_mlx_data
     t_img       *player1;
 	t_img		*player2;
     t_img       *exit;
+	t_img		*enemy;
 	t_exit_info	exit_info;
     int         map_width;
     int         map_height;
@@ -53,6 +54,7 @@ void	exit_game(t_mlx_data *data, int error_catch);
 t_img *create_image(void *mlx_ptr, int width, int height);
 void	print_message(t_mlx_data *data, char	*message, int x, int y);
 void	init_display(t_mlx_data *data);
+void	refresh_movement_count(t_mlx_data *data);
 
 #endif
 

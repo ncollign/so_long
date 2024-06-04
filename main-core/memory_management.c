@@ -27,6 +27,8 @@ void	exit_game(t_mlx_data *data, int	error_catch)
 		mlx_destroy_image(data->mlx_ptr, data->player2->image);
 	if (data->exit != NULL)
 		mlx_destroy_image(data->mlx_ptr, data->exit->image);
+	if (data->enemy != NULL)
+		mlx_destroy_image(data->mlx_ptr, data->enemy->image);
 	if (data->win_ptr != NULL)
 		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
 	if (data->mlx_ptr != NULL)
@@ -83,6 +85,7 @@ void	init_display(t_mlx_data *data)
     t_img *original_player1;
 	t_img *original_player2;
     t_img *original_exit;
+	t_img *original_enemy;
 
 	data->win_ptr = mlx_new_window(data->mlx_ptr, data->map_width * data->cell_size, data->map_height * data->cell_size, "So_Long");
 	if (!data->win_ptr)
@@ -96,7 +99,8 @@ void	init_display(t_mlx_data *data)
 	original_player1 = load_image(data->mlx_ptr, "../ressources/player/player_texture1.xpm");
 	original_player2 = load_image(data->mlx_ptr, "../ressources/player/player_texture2.xpm");
 	original_exit = load_image(data->mlx_ptr, "../ressources/exit_texture.xpm");
-	if (original_background == NULL || original_walls == NULL || original_collectibles == NULL || original_player1 == NULL || original_player2 == NULL || original_exit == NULL)
+	original_enemy = load_image(data->mlx_ptr, "../ressources/enemy_texture.xpm");
+	if (original_background == NULL || original_walls == NULL || original_collectibles == NULL || original_player1 == NULL || original_player2 == NULL || original_exit == NULL || original_enemy == NULL)
 		exit_game(data, 1);
 	data->background = resize_image(data->mlx_ptr, original_background, data->cell_size, data->cell_size);
 	data->walls = resize_image(data->mlx_ptr, original_walls, data->cell_size, data->cell_size);
@@ -104,16 +108,19 @@ void	init_display(t_mlx_data *data)
 	data->player1 = resize_image(data->mlx_ptr, original_player1, data->cell_size, data->cell_size);
 	data->player2 = resize_image(data->mlx_ptr, original_player2, data->cell_size, data->cell_size);
 	data->exit = resize_image(data->mlx_ptr, original_exit, data->cell_size, data->cell_size);
+	data->enemy = resize_image(data->mlx_ptr, original_enemy, data->cell_size, data->cell_size);
 	mlx_destroy_image(data->mlx_ptr, original_background->image);
 	mlx_destroy_image(data->mlx_ptr, original_walls->image);
 	mlx_destroy_image(data->mlx_ptr, original_collectibles->image);
 	mlx_destroy_image(data->mlx_ptr, original_player1->image);
 	mlx_destroy_image(data->mlx_ptr, original_player2->image);
 	mlx_destroy_image(data->mlx_ptr, original_exit->image);
+	mlx_destroy_image(data->mlx_ptr, original_enemy->image);
 	free(original_background);
 	free(original_walls);
     free(original_collectibles);
     free(original_player1);
 	free(original_player2);
     free(original_exit);
+	free(original_enemy);
 }

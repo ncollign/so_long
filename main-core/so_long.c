@@ -47,6 +47,12 @@ int mapRead(t_mlx_data *data, const char *map_path)
     return (0);
 }
 
+int handle_close(t_mlx_data *data)
+{
+    exit_game(data, 1);
+    return (0);
+}
+
 void initGame(t_mlx_data *data)
 /* This function initialize the game */
 {
@@ -101,6 +107,7 @@ int	main(int argc, char *argv[])
 	checkMap(data);
 	render_map(data);
 	mlx_key_hook(data->win_ptr, (int (*)())handle_input, data);
+	mlx_hook(data->win_ptr, 17, 0, (int (*)())handle_close, data);
 	mlx_loop(data->mlx_ptr);
 	return (EXIT_SUCCESS);
 }
