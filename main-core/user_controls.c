@@ -63,6 +63,7 @@ void	collect(t_mlx_data *data, int dest_x, int dest_y)
 	if (data->collectible_count == data->score)
 	{
 		data->exit_info.exit_visibility = 1;
+		data->map[data->exit_info.exit_y][data->exit_info.exit_x].type = 'E';
 		refresh_cell(data, data->exit_info.exit_x, data->exit_info.exit_y);
 	}
 	data->map[data->player_y][data->player_x].type = '0';
