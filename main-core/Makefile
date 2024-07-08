@@ -1,7 +1,7 @@
 NAME = so_long
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -I/opt/X11/include -I../libft
-MLX = -L../minilibx_linux -lmlx -L/opt/X11/lib -lXext -lX11 -lm
+MLX = -L../minilibx-linux -lmlx -L/opt/X11/lib -lXext -lX11 -lm
 SRCS = so_long.c rendering.c user_controls.c check_map.c memory_management.c
 LIBFT = ../libft/libft.a
 OBJS = $(SRCS:.c=.o)

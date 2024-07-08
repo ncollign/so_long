@@ -3,8 +3,8 @@
 # include <fcntl.h>
 # include <X11/keysym.h>
 # include "../libft/libft.h"
-# include "../minilibx_linux/mlx.h"
-# include "../minilibx_linux/mlx_int.h"
+# include "../minilibx-linux/mlx.h"
+# include "../minilibx-linux/mlx_int.h"
 
 typedef	struct	s_Tile
 {
