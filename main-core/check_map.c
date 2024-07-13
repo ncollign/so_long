@@ -4,6 +4,30 @@
 */
 #include "so_long.h"
 
+static void	verify_player_path(t_mlx_data *data)
+{
+	int	x;
+	int	y;
+	int	has_path;
+
+	has_path = 0;
+	x = data->player_x;
+	y = data->player_y;
+	if (x > 0 && data->map[y][x - 1].type == '0')
+		has_path = 1;
+	if (x < data->map_width - 1 && data->map[y][x + 1].type == '0')
+		has_path = 1;
+	if (y > 0 && data->map[y - 1][x].type == '0')
+		has_path = 1;
+	if (y < data->map_height - 1 && data->map[y + 1][x].type == '0')
+		has_path = 1;
+	if (!has_path)
+	{
+		ft_printf("Error\nThe player must be able to move at start.\n");
+		exit_game(data, 1);
+	}
+}
+
 void	checkMap(t_mlx_data *data)
 /*
 This function checks if the map is OK and have all the specifications in the subject
@@ -28,8 +52,7 @@ Returns 1 if NOK
 			{
 				if (data->map[y][x].type != '1')
 				{
-					// Toutes les lignes doivent être de la même longueur pour être rectangulaire
-					ft_printf("Error\nThe map is not closed with walls or is not rectangular");
+					ft_printf("Error\nThe map is not closed with walls or is not rectangular\n");
 					exit_game(data, 1);
 				}	 
 			}
@@ -74,6 +97,7 @@ Returns 1 if NOK
 		ft_printf("Error\nThe map must have 1 exit\n");
 		exit_game(data, 1);
 	}
+	verify_player_path(data);
 }
 
 void	getMapSize(t_mlx_data *data, const char *map_path)
@@ -82,6 +106,7 @@ void	getMapSize(t_mlx_data *data, const char *map_path)
     int map_fd;
     int x;
     int y;
+	int	x_len;
     char *line;
 
     x = 0;
@@ -96,17 +121,29 @@ void	getMapSize(t_mlx_data *data, const char *map_path)
     if (line == NULL)
     {
         ft_printf("Error\nMap file is empty or could not be read.\n");
+		ft_free(&line);
         close(map_fd);
         exit_game(data, 1);
     }
     x = ft_strlen(line) - 2;
-    ft_free(&line);
-    y = 1;
-    while ((line = get_next_line(map_fd)) != NULL)
+    y = 0;
+    while (line != NULL)
     {
-        ft_free(&line);
-        y++;
+		y++;
+		x_len = (int)(ft_strlen(line) - 2);
+		if (x_len != x)
+		{
+			line = get_next_line(map_fd);
+			if (line != NULL || (x_len != x - 2 && line == NULL))
+			{
+				ft_printf("Error\nThe map must be rectangular\n");
+				ft_free(&line);
+				exit_game(data, 1);
+			}
+		}
+		line = get_next_line(map_fd);
     }
+	ft_free(&line);
     close(map_fd);
     if (y < 4 || x < 4)
     {
@@ -115,7 +152,6 @@ void	getMapSize(t_mlx_data *data, const char *map_path)
     }
     data->map_width = x;
     data->map_height = y;
-	//ft_printf("%d, %d\n", data->map_height, data->map_width);
 }
 
 int	checkMapPath(char *map_path)

@@ -60,6 +60,7 @@ void	render_map(t_mlx_data *data)
 */
 {
 	char	*message;
+	char	*nbr_move;
 	int	x;
 	int	y;
 
@@ -71,6 +72,9 @@ void	render_map(t_mlx_data *data)
 			refresh_cell(data, x, y);
 		}
 	}
-	message = ft_strjoin("Movements : ", ft_itoa(data->move_count));
+	nbr_move = ft_itoa(data->move_count);
+	message = ft_strjoin("Movements : ", nbr_move);
 	print_message(data, message, ((data->cell_size * data->map_width) / 2 - 50), (data->cell_size * data->map_height - 5));
+	ft_free(&nbr_move);
+	ft_free(&message);
 }
