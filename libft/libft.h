@@ -70,6 +70,7 @@ int		ft_nblen(int n);
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 5
 # endif
+
 char	*get_next_line(int fd);
 
 // Autre
