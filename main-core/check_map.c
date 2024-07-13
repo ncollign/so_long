@@ -48,7 +48,35 @@ static void	verify_player_path(t_mlx_data *data)
 	}
 }
 
-static void	
+static int	count_each(int x, int y, int counter[2], t_mlx_data *data)
+/*
+	This function tests the type of the tile and count
+	counter[0] : player_counter;
+	counter[1] : exit_counter;
+*/
+{
+	if ((x == 0) || (x == data->map_width - 1))
+		if (data->map[y][x].type != '1')
+			handle_error("The map not closed not rectangular\n", data);
+	if ((y == 0) || (y == data->map_height - 1))
+		if (data->map[y][x].type != '1')
+			handle_error("The map not closed not rectangular\n", data);
+	if (data->map[y][x].type == 'C')
+		data->collectible_count++;
+	else if (data->map[y][x].type == 'P')
+	{
+		data->player_x = x;
+		data->player_y = y;
+		counter[0]++;
+	}
+	else if (data->map[y][x].type == 'E')
+	{
+		data->exit_info.exit_x = x;
+		data->exit_info.exit_y = y;
+		counter[1]++;
+	}
+	return (counter);
+}
 
 void	check_map(t_mlx_data *data)
 /*
@@ -59,37 +87,17 @@ void	check_map(t_mlx_data *data)
 {
 	int	x;
 	int	y;
-	int	has_player;
-	int	has_exit;
+	int	counter[2];
 
-	has_exit = 0;
-	has_player = 0;
 	y = 0;
+	counter[0] = 0;
+	counter[1] = 0;
 	while (y < data->map_height)
 	{
 		x = 0;
 		while (x < data->map_width)
 		{
-			if ((x == 0) || (x == data->map_width - 1))
-				if (data->map[y][x].type != '1')
-					handle_error("The map not closed not rectangular\n", data);
-			if ((y == 0) || (y == data->map_height - 1))
-				if (data->map[y][x].type != '1')
-					handle_error("The map not closed not rectangular\n", data);
-			if (data->map[y][x].type == 'C')
-				data->collectible_count++;
-			else if (data->map[y][x].type == 'P')
-			{
-				data->player_x = x;
-				data->player_y = y;
-				has_player++;
-			}
-			else if (data->map[y][x].type == 'E')
-			{
-				data->exit_info.exit_x = x;
-				data->exit_info.exit_y = y;
-				has_exit++;
-			}
+			counter = count_each(x, y, counter, data);
 			x++;
 		}
 		y++;
