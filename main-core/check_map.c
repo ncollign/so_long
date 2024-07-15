@@ -48,7 +48,7 @@ static void	verify_player_path(t_mlx_data *data)
 	}
 }
 
-static int	count_each(int x, int y, int counter[2], t_mlx_data *data)
+static void	count_each(int x, int y, int counter[2], t_mlx_data *data)
 /*
 	This function tests the type of the tile and count
 	counter[0] : player_counter;
@@ -75,7 +75,6 @@ static int	count_each(int x, int y, int counter[2], t_mlx_data *data)
 		data->exit_info.exit_y = y;
 		counter[1]++;
 	}
-	return (counter);
 }
 
 void	check_map(t_mlx_data *data)
@@ -83,6 +82,10 @@ void	check_map(t_mlx_data *data)
 	This function checks if the map is OK and have all the specifications in the subject
 	Returns 0 if OK
 	Returns 1 if NOK
+
+	Counter :
+	[0] : player counter
+	[1] : exit counter
 */
 {
 	int	x;
@@ -97,16 +100,16 @@ void	check_map(t_mlx_data *data)
 		x = 0;
 		while (x < data->map_width)
 		{
-			counter = count_each(x, y, counter, data);
+			count_each(x, y, counter, data);
 			x++;
 		}
 		y++;
 	}
 	if (data->collectible_count == 0)
 		handle_error("The map must have minimum 1 item to collect\n", data);
-	if ((has_player == 0) || (has_player > 1))
+	if ((counter[0] == 0) || (counter[0] > 1))
 		handle_error("The map must have 1 player\n", data);
-	if ((has_exit == 0) || (has_exit > 1))
+	if ((counter[1] == 0) || (counter[1] > 1))
 		handle_error("The map must have 1 exit\n", data);
 	verify_player_path(data);
 }

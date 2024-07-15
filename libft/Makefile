@@ -1,7 +1,7 @@
 SRCS = $(shell find . -type f -name '*.c')
 OBJS = $(SRCS:.c=.o)
 NAME = libft.a
-CFLAGS = -Wall -Werror -Wextra -I ./
+CFLAGS = -Wall -Werror -Wextra -I ./ -fPIC
 
 %.o: %.c
 	cc $(CFLAGS) -c $< -o $@
