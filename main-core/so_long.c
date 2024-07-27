@@ -13,50 +13,53 @@
 #include "so_long.h"
 
 int	map_read(t_mlx_data *data, const char *map_path)
-/* This function reads the fd containing the map and creates a 2D table with the map */
+/*
+	This function reads the fd containing the map
+	and creates a 2D table with the map
+*/
 {
-    char *line;
-    int x, y;
-    int map_fd;
+	char	*line;
+	int		x;
+	int		y;
+	int		map_fd;
 
-    map_fd = open(map_path, O_RDONLY);
-    if (map_fd == -1)
-    {
-        ft_printf("Error\nMap file could not be opened.\n");
-        return (-1);
-    }
+	map_fd = open(map_path, O_RDONLY);
+	if (map_fd == -1)
+	{
+		ft_printf("Error\nMap file could not be opened.\n");
+		return (-1);
+	}
+	data->map = (Tile **)malloc(data->map_height * sizeof(Tile *));
+	if (!data->map)
+	{
+		ft_printf("Error\nMemory allocation failed!\n");
+		close(map_fd);
+		return (-1);
+	}
+	y = 0;
+	while ((line = get_next_line(map_fd)) != NULL && y < data->map_height)
+	{
+		data->map[y] = (Tile *)malloc(data->map_width * sizeof(Tile));
+		if (!data->map[y])
+		{
+			ft_printf("Error\nMemory allocation failed!\n");
+			ft_free(&line);
+			close(map_fd);
+			return (-1);
+		}
 
-    data->map = (Tile **)malloc(data->map_height * sizeof(Tile *));
-    if (!data->map)
-    {
-        ft_printf("Error\nMemory allocation failed!\n");
-        close(map_fd);
-        return (-1);
-    }
-    y = 0;
-    while ((line = get_next_line(map_fd)) != NULL && y < data->map_height)
-    {
-        data->map[y] = (Tile *)malloc(data->map_width * sizeof(Tile));
-        if (!data->map[y])
-        {
-            ft_printf("Error\nMemory allocation failed!\n");
-            ft_free(&line);
-            close(map_fd);
-            return (-1);
-        }
+		x = 0;
+		while (x < data->map_width && line[x] != '\0')
+		{
+			data->map[y][x].type = line[x];
+			x++;
+		}
 
-        x = 0;
-        while (x < data->map_width && line[x] != '\0')
-        {
-            data->map[y][x].type = line[x];
-            x++;
-        }
-
-        ft_free(&line);
-        y++;
-    }
-    close(map_fd);
-    return (0);
+		ft_free(&line);
+		y++;
+	}
+	close(map_fd);
+	return (0);
 }
 
 int handle_close(t_mlx_data *data)
