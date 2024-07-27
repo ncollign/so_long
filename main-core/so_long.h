@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ncollign <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/11 11:11:21 by ncollign          #+#    #+#             */
+/*   Updated: 2024/03/11 11:18:57 by ncollign         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SO_LONG_H
 # define SO_LONG_H
 # include <fcntl.h>
@@ -42,9 +54,9 @@ typedef struct  s_mlx_data
 	int			score;
 }	t_mlx_data;
 
-void	getMapSize(t_mlx_data *data, const char *map_path);
-int	checkMapPath(char *map_path);
-void	checkMap(t_mlx_data *data);
+void	get_map_size(t_mlx_data *data, const char *map_path);
+int	check_map_path(char *map_path);
+void	check_map(t_mlx_data *data);
 int	handle_input(int keysym, t_mlx_data *data);
 void render_map(t_mlx_data *data);
 void refresh_cell(t_mlx_data *mlx_data, int x, int y);

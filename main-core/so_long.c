@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ncollign <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/11 11:11:21 by ncollign          #+#    #+#             */
+/*   Updated: 2024/03/11 11:18:57 by ncollign         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
-int mapRead(t_mlx_data *data, const char *map_path)
+int	map_read(t_mlx_data *data, const char *map_path)
 /* This function reads the fd containing the map and creates a 2D table with the map */
 {
     char *line;
@@ -53,7 +65,7 @@ int handle_close(t_mlx_data *data)
     return (0);
 }
 
-void initGame(t_mlx_data *data)
+void init_game(t_mlx_data *data)
 /* This function initialize the game */
 {
     if (!data)
@@ -93,7 +105,7 @@ int	main(int argc, char *argv[])
 	else
 	{
 		map_path = ft_strjoin("../maps/", argv[1]);
-		if (checkMapPath(map_path))
+		if (check_map_path(map_path))
 				ft_printf("Map path saved.\n");
 		else
 		{
@@ -101,10 +113,10 @@ int	main(int argc, char *argv[])
 			ft_printf("Map path doesn't exist. Default settings applied.\n");
 		}
 	}
-	getMapSize(data, map_path);
-	mapRead(data, map_path);
-	initGame(data);
-	checkMap(data);
+	get_map_size(data, map_path);
+	map_read(data, map_path);
+	init_game(data);
+	check_map(data);
 	render_map(data);
 	mlx_key_hook(data->win_ptr, (int (*)())handle_input, data);
 	mlx_hook(data->win_ptr, 17, 0, (int (*)())handle_close, data);
