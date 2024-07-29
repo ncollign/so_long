@@ -21,15 +21,17 @@ static void	handle_error(char *message, t_mlx_data *data)
 	exit_game(data, 1);
 }
 
-static int	read_map(char *line, t_mlx_data *data)
+static int	read_map(char *line, int map_fd, t_mlx_data *data)
 /*
 	This function reads all the file of the map to get the y value
 */
 {
 	int	x_len;
 	int	y;
+	int	x;
 
 	y = 0;
+	x = data->map_width;
 	while (line != NULL)
 	{
 		y++;
@@ -67,7 +69,7 @@ void	get_map_size(t_mlx_data *data, const char *map_path)
 		handle_error("Map file is empty or could not be read.\n", data);
 	}
 	data->map_width = ft_strlen(line) - 2;
-	data->map_height = read_map(&line, data);
+	data->map_height = read_map(line, map_fd, data);
 	ft_free(&line);
 	close(map_fd);
 	if (data->map_height < 4 || data->map_width < 4)
