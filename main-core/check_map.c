@@ -21,33 +21,6 @@ static void	handle_error(char *message, t_mlx_data *data)
 	exit_game(data, 1);
 }
 
-static void	verify_player_path(t_mlx_data *data)
-/*
-	This function verify that the player can move on the map
-*/
-{
-	int	x;
-	int	y;
-	int	has_path;
-
-	has_path = 0;
-	x = data->player_x;
-	y = data->player_y;
-	if (x > 0 && data->map[y][x - 1].type == '0')
-		has_path = 1;
-	if (x < data->map_width - 1 && data->map[y][x + 1].type == '0')
-		has_path = 1;
-	if (y > 0 && data->map[y - 1][x].type == '0')
-		has_path = 1;
-	if (y < data->map_height - 1 && data->map[y + 1][x].type == '0')
-		has_path = 1;
-	if (!has_path)
-	{
-		ft_printf("Error\nThe player must be able to move at start.\n");
-		exit_game(data, 1);
-	}
-}
-
 static void	count_each(int x, int y, int counter[2], t_mlx_data *data)
 /*
 	This function tests the type of the tile and count

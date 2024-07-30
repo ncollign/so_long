@@ -64,10 +64,12 @@ t_img	*resize_image(void *mlx_ptr, t_img *src_img,
 			int new_width, int new_height);
 t_img	*load_image(void *mlx_ptr, char *path);
 void	exit_game(t_mlx_data *data, int error_catch);
+void	free_map(t_tile **map, int height);
 t_img	*create_image(void *mlx_ptr, int width, int height);
 void	print_message(t_mlx_data *data, char	*message, int x, int y);
 void	refresh_movement_count(t_mlx_data *data);
 void	refresh_display_player_moves(t_mlx_data *data);
 void	init_game(t_mlx_data *data);
+void	verify_player_path(t_mlx_data *data);
 
 #endif

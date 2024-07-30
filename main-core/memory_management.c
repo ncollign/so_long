@@ -41,24 +41,30 @@ static void	free_images(t_mlx_data *data)
 	}
 }
 
+void	free_map(t_tile **map, int height)
+/*
+	This function free the map
+*/
+{
+	int	y;
+
+	y = 0;
+	while (y < height)
+	{
+		free(map[y]);
+		y++;
+	}
+	free(map);
+}
+
 void	exit_game(t_mlx_data *data, int error_catch)
 /*
 	This function exits the game properly
 */
 {
-	int		y;
-
 	ft_printf("Closing the window...\n");
 	if (data->map != NULL)
-	{
-		y = 0;
-		while (y < data->map_height)
-		{
-			free(data->map[y]);
-			y++;
-		}
-		free(data->map);
-	}
+		free_map(data->map, data->map_height);
 	free_images(data);
 	exit (error_catch);
 }
