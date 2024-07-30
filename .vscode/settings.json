@@ -3,6 +3,7 @@
 		"mlx.h": "c",
 		"stdio.h": "c",
 		"so_long.h": "c",
-		"so_long.C": "cpp"
+		"so_long.C": "cpp",
+		"system_error": "c"
 	}
 }

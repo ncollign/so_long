@@ -13,7 +13,13 @@
 #include "so_long.h"
 
 static void	free_images(t_mlx_data *data)
+/*
+	This function free all the images on the display
+	Also destroy the display
+*/
 {
+	if (data->win_ptr != NULL)
+		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
 	if (data->background != NULL)
 		mlx_destroy_image(data->mlx_ptr, data->background->image);
 	if (data->walls != NULL)
@@ -28,8 +34,6 @@ static void	free_images(t_mlx_data *data)
 		mlx_destroy_image(data->mlx_ptr, data->exit->image);
 	if (data->enemy != NULL)
 		mlx_destroy_image(data->mlx_ptr, data->enemy->image);
-	if (data->win_ptr != NULL)
-		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
 	if (data->mlx_ptr != NULL)
 	{
 		mlx_destroy_display(data->mlx_ptr);
@@ -38,6 +42,9 @@ static void	free_images(t_mlx_data *data)
 }
 
 void	exit_game(t_mlx_data *data, int error_catch)
+/*
+	This function exits the game properly
+*/
 {
 	int		y;
 
@@ -99,76 +106,4 @@ t_img	*create_image(void *mlx_ptr, int width, int height)
 	img->width = width;
 	img->height = height;
 	return (img);
-}
-
-/*static void	destroy_original_images(t_mlx_data *data)
-{
-	mlx_destroy_image(data->mlx_ptr, data->image);
-	mlx_destroy_image(data->mlx_ptr, original_walls->image);
-	mlx_destroy_image(data->mlx_ptr, original_collectibles->image);
-	mlx_destroy_image(data->mlx_ptr, original_player1->image);
-	mlx_destroy_image(data->mlx_ptr, original_player2->image);
-	mlx_destroy_image(data->mlx_ptr, original_exit->image);
-	mlx_destroy_image(data->mlx_ptr, original_enemy->image);
-	free(original_background);
-	free(original_walls);
-	free(original_collectibles);
-	free(original_player1);
-	free(original_player2);
-	free(original_exit);
-	free(original_enemy);
-}*/
-
-/*static void	resize_images(t_mlx_data *data)
-{
-
-}*/
-
-static void	load_images(t_mlx_data *data)
-{
-	data->background = load_image(data->mlx_ptr,
-			"../ressources/background_texture.xpm");
-	data->walls = load_image(data->mlx_ptr,
-			"../ressources/wall_texture.xpm");
-	data->collectibles = load_image(data->mlx_ptr,
-			"../ressources/collectible_texture.xpm");
-	data->player1 = load_image(data->mlx_ptr,
-			"../ressources/player/player_texture1.xpm");
-	data->player2 = load_image(data->mlx_ptr,
-			"../ressources/player/player_texture2.xpm");
-	data->exit = load_image(data->mlx_ptr,
-			"../ressources/exit_texture.xpm");
-	data->enemy = load_image(data->mlx_ptr,
-			"../ressources/enemy_texture.xpm");
-	if ((data->background == NULL) || (data->walls == NULL)
-		|| (data->collectibles == NULL) || (data->player1 == NULL)
-		|| (data->player2 == NULL) || (data->exit == NULL)
-		|| (data->enemy == NULL))
-		exit_game(data, 1);
-	data->background = resize_image(data->mlx_ptr, data->background,
-			data->cell_size, data->cell_size);
-	data->walls = resize_image(data->mlx_ptr, data->walls,
-			data->cell_size, data->cell_size);
-	data->collectibles = resize_image(data->mlx_ptr, data->collectibles,
-			data->cell_size, data->cell_size);
-	data->player1 = resize_image(data->mlx_ptr, data->player1,
-			data->cell_size, data->cell_size);
-	data->player2 = resize_image(data->mlx_ptr, data->player2,
-			data->cell_size, data->cell_size);
-	data->exit = resize_image(data->mlx_ptr, data->exit,
-			data->cell_size, data->cell_size);
-	data->enemy = resize_image(data->mlx_ptr, data->enemy,
-			data->cell_size, data->cell_size);
-}
-
-void	init_display(t_mlx_data *data)
-{
-	data->win_ptr = mlx_new_window(data->mlx_ptr, data->map_width * data->cell_size, data->map_height * data->cell_size, "So_Long");
-	if (!data->win_ptr)
-	{
-		ft_printf("Error\nFailed to create a window\n");
-		exit_game(data, 1);
-	}
-	load_images(data);
-	//destroy_original_images(data);
 }

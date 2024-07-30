@@ -5,8 +5,7 @@ MLX_DIR = ./minilibx-linux
 LIBFT = $(LIBFT_DIR)/libft.a
 MLX = -L$(MLX_DIR) -lmlx -L/opt/X11/lib -lXext -lX11 -lm
 SRC_DIR = main-core
-UTILS_DIR = $(SRC_DIR)/utils
-SRC_FILES = $(wildcard $(SRC_DIR)/*.c) $(wildcard $(UTILS_DIR)/*.c)
+SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
 OBJS = $(SRC_FILES:.c=.o)
 NAME = so_long
 

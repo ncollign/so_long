@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   big_sort.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ncollign <ncollign@student.42luxembou      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/09 11:44:56 by ncollign          #+#    #+#             */
+/*   Updated: 2024/07/09 11:44:57 by ncollign         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
 void	player_win(t_mlx_data *data)
@@ -5,11 +17,11 @@ void	player_win(t_mlx_data *data)
 	Display the win title
 */
 {
-	int win_width;
-	int	win_height;
-	int x_position;
-	int y_position;
 	char	*message;
+	int		win_width;
+	int		win_height;
+	int		x_position;
+	int		y_position;
 
 	message = "";
 	data->map[data->player_y][data->player_x].type = '0';
@@ -32,11 +44,11 @@ void	enemy_touched(t_mlx_data *data)
 	This function handle the collision between the player and the enemies
 */
 {
-	int win_width;
-	int	win_height;
-	int x_position;
-	int y_position;
 	char	*message;
+	int		win_width;
+	int		win_height;
+	int		x_position;
+	int		y_position;
 
 	data->map[data->player_y][data->player_x].type = '0';
 	refresh_cell(data, data->player_x, data->player_y);
@@ -79,18 +91,15 @@ void	player_move(t_mlx_data *data, int dest_x, int dest_y)
 	This function move the player in the data and update display
 */
 {
-	char	*message;
-	int	x;
-
-	message = "";
 	if (data->map[dest_y][dest_x].type != '1' && data->exit_info.win == 0)
-	{	
+	{
 		data->move_count++;
 		if (data->map[dest_y][dest_x].type == 'C')
 			collect(data, dest_x, dest_y);
 		else if (data->map[dest_y][dest_x].type == 'D')
 			enemy_touched(data);
-		else if ((data->map[dest_y][dest_x].type == 'E') && (data->exit_info.exit_visibility == 1))
+		else if ((data->map[dest_y][dest_x].type == 'E')
+			&& (data->exit_info.exit_visibility == 1))
 			player_win(data);
 		else
 		{
@@ -101,14 +110,7 @@ void	player_move(t_mlx_data *data, int dest_x, int dest_y)
 			data->map[data->player_y][data->player_x].type = 'P';
 			refresh_cell(data, data->player_x, data->player_y);
 		}
-		message = ft_strjoin("Movements : ", ft_itoa(data->move_count));
-		x = (data->map_width / 2) + 6;
-		while (x < data->map_width)
-		{
-			refresh_cell(data, x, data->map_height - 1);
-			x++;
-		}
-		print_message(data, message, ((data->cell_size * data->map_width) / 2 - 50), (data->cell_size * data->map_height - 5));
+		refresh_display_player_moves(data);
 	}
 }
 
