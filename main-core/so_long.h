@@ -52,6 +52,7 @@ typedef struct s_mlx_data
 	int			move_count;
 	int			collectible_count;
 	int			score;
+	char		*map_path;
 }	t_mlx_data;
 
 void	get_map_size(t_mlx_data *data, char *map_path);

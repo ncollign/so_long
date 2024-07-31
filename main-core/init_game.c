@@ -64,9 +64,12 @@ static void	init_image_loading(t_mlx_data *data)
 }
 
 static void	init_display(t_mlx_data *data)
+/*
+	This function initialize the window/display
+*/
 {
 	data->win_ptr = mlx_new_window(data->mlx_ptr, data->map_width
-			* data->cell_size, data->map_height * data->cell_size, "So_Long");
+			* data->cell_size, data->map_height * data->cell_size, "so_long");
 	if (!data->win_ptr)
 	{
 		ft_printf("Error\nFailed to create a window\n");
@@ -75,7 +78,7 @@ static void	init_display(t_mlx_data *data)
 	init_image_loading(data);
 }
 
-void	calculate_cell_size(t_mlx_data *data)
+static void	define_cell_size(t_mlx_data *data)
 /*
 	This function calculates cell_size if the map is bigger than the screen
 */
@@ -99,11 +102,13 @@ void	init_game(t_mlx_data *data)
 		ft_printf("Error\nFailed to initialize MinilibX\n");
 		exit_game(data, 1);
 	}
-	calculate_cell_size(data);
+	define_cell_size(data);
 	data->move_count = 0;
 	data->score = 0;
 	data->collectible_count = 0;
 	data->exit_info.exit_visibility = 0;
 	data->exit_info.win = 0;
 	init_display(data);
+	mlx_set_font(data->mlx_ptr, data->win_ptr,
+		"-*-times-*-*-*-*-80-*-*-*-*-*-*-*");
 }

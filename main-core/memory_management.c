@@ -18,8 +18,6 @@ static void	free_images(t_mlx_data *data)
 	Also destroy the display
 */
 {
-	if (data->win_ptr != NULL)
-		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
 	if (data->background != NULL)
 		mlx_destroy_image(data->mlx_ptr, data->background->image);
 	if (data->walls != NULL)
@@ -34,6 +32,8 @@ static void	free_images(t_mlx_data *data)
 		mlx_destroy_image(data->mlx_ptr, data->exit->image);
 	if (data->enemy != NULL)
 		mlx_destroy_image(data->mlx_ptr, data->enemy->image);
+	if (data->win_ptr != NULL)
+		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
 	if (data->mlx_ptr != NULL)
 	{
 		mlx_destroy_display(data->mlx_ptr);
@@ -65,6 +65,8 @@ void	exit_game(t_mlx_data *data, int error_catch)
 	ft_printf("Closing the window...\n");
 	if (data->map != NULL)
 		free_map(data->map, data->map_height);
+	if (data->map_path != NULL)
+		free(data->map_path);
 	free_images(data);
 	exit (error_catch);
 }

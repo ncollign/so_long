@@ -12,10 +12,10 @@
 
 #include "so_long.h"
 
-void	test_tile(t_mlx_data *data, int x_tested,
-			int y_tested, int has_path[2]);
+static void	test_tile(t_mlx_data *data, int x_tested,
+				int y_tested, int has_path[2]);
 
-void	flood_fill(t_mlx_data *data, int x, int y, int has_path[2])
+static void	flood_fill(t_mlx_data *data, int x, int y, int has_path[2])
 /*
 	This function tests all the tiles around the player and if he can walk on it
 	Calls the function test_tile if OK
@@ -35,7 +35,8 @@ void	flood_fill(t_mlx_data *data, int x, int y, int has_path[2])
 		test_tile(data, x, y + 1, has_path);
 }
 
-void	test_tile(t_mlx_data *data, int x_tested, int y_tested, int has_path[2])
+static void	test_tile(t_mlx_data *data, int x_tested,
+		int y_tested, int has_path[2])
 /*
 	This function tests a tile if it is a Collectible or an exit or nothing
 	If the player cant walk on it, the type become 'T' has tested
@@ -54,34 +55,42 @@ void	test_tile(t_mlx_data *data, int x_tested, int y_tested, int has_path[2])
 	flood_fill(data, data->player_x, data->player_y, has_path);
 }
 
-t_tile	**copy_map(t_tile **map, int width, int height)
+static t_tile	**copy_map(t_tile **map, int width, int height)
+/*
+	This function copies the map to create a save, before the floodfill
+*/
 {
 	t_tile	**new_map;
-	int		i;
-	int		j;
+	int		x;
+	int		y;
 
 	new_map = (t_tile **)malloc(sizeof(t_tile *) * height);
 	if (!new_map)
 		return (NULL);
-	for (i = 0; i < height; i++)
+	y = 0;
+	while (y < height)
 	{
-		new_map[i] = (t_tile *)malloc(sizeof(t_tile) * width);
-		if (!new_map[i])
+		new_map[y] = (t_tile *)malloc(sizeof(t_tile) * width);
+		if (!new_map[y])
 		{
-			while (--i >= 0)
-				free(new_map[i]);
-			free(new_map);
+			free_map(new_map, height);
 			return (NULL);
 		}
-		for (j = 0; j < width; j++)
+		x = 0;
+		while (x < width)
 		{
-			new_map[i][j] = map[i][j];
+			new_map[y][x] = map[y][x];
+			x++;
 		}
+		y++;
 	}
 	return (new_map);
 }
 
-void	restore_map(t_tile **map, t_tile **backup, int width, int height)
+static void	restore_map(t_tile **map, t_tile **backup, int width, int height)
+/*
+	This function restore the map after the floodfill
+*/
 {
 	int	x;
 	int	y;

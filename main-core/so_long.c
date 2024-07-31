@@ -80,30 +80,30 @@ static int	handle_close(t_mlx_data *data)
 	return (0);
 }
 
-static char	*define_path(int argc, char *argv)
+static void	define_path(int argc, char *argv, t_mlx_data *data)
+/*
+	This function defines the path of the map
+*/
 {
-	char	*map_path;
-	char	*full_path;
-
 	if (argc < 2)
 	{
-		map_path = "maps/map_default.ber";
-		ft_printf("No map path given. Default settings applied.\n");
+		ft_printf("Error\nNo map path given\n");
+		free(data);
+		exit(EXIT_FAILURE);
 	}
 	else
 	{
-		full_path = ft_strjoin("maps/", argv);
-		map_path = full_path;
-		ft_free(&full_path);
-		if (check_map_path(map_path))
+		data->map_path = ft_strjoin("maps/", argv);
+		if (check_map_path(data->map_path))
 			ft_printf("Map path saved.\n");
 		else
 		{
-			map_path = "maps/map_default.ber";
-			ft_printf("Map path doesn't exist. Default settings applied.\n");
+			ft_printf("Error\nMap path doesn't exist.\n");
+			free(data->map_path);
+			free(data);
+			exit(EXIT_FAILURE);
 		}
 	}
-	return (map_path);
 }
 
 int	main(int argc, char *argv[])
@@ -113,14 +113,13 @@ int	main(int argc, char *argv[])
 */
 {
 	t_mlx_data	*data;
-	char		*map_path;
 
 	data = (t_mlx_data *)malloc(sizeof(t_mlx_data));
 	if (!data)
 		return (EXIT_FAILURE);
-	map_path = define_path(argc, argv[1]);
-	get_map_size(data, map_path);
-	initialize_map(data, map_path);
+	define_path(argc, argv[1], data);
+	get_map_size(data, data->map_path);
+	initialize_map(data, data->map_path);
 	init_game(data);
 	check_map(data);
 	render_map(data);

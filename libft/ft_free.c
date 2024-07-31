@@ -14,6 +14,9 @@
 
 void	ft_free(char **buffer)
 {
-	free(*buffer);
-	*buffer = NULL;
+	if (buffer && *buffer)
+	{
+		free(*buffer);
+		*buffer = NULL;
+	}
 }

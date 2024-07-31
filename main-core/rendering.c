@@ -17,8 +17,6 @@ void	print_message(t_mlx_data *data, char *message, int x, int y)
 	This function displays a message on the screen
 */
 {
-	mlx_set_font(data->mlx_ptr, data->win_ptr,
-		"-*-times-*-*-*-*-80-*-*-*-*-*-*-*");
 	mlx_string_put(data->mlx_ptr, data->win_ptr, x, y, 0xFFFFFF, message);
 }
 
@@ -83,30 +81,28 @@ void	refresh_cell(t_mlx_data *data, int x, int y)
 	This function refreshes a cell on the display
 */
 {
+	void	*image;
+
+	image = data->background->image;
 	if (data->map[y][x].type == '1')
-		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-			data->walls->image, x * data->cell_size, y * data->cell_size);
+		image = data->walls->image;
 	else if (data->map[y][x].type == 'C')
-		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-			data->collectibles->image, x * data->cell_size, y
-			* data->cell_size);
-	else if (data->map[y][x].type == 'P' && (data->player_x % 2 == 0))
-		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-			data->player1->image, x * data->cell_size, y
-			* data->cell_size);
-	else if (data->map[y][x].type == 'P' && (data->player_x % 2 != 0))
-		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-			data->player2->image, x * data->cell_size, y * data->cell_size);
+		image = data->collectibles->image;
+	else if (data->map[y][x].type == 'P' && ((data->player_x % 2 == 0
+		&& data->player_y % 2 == 0) || (data->player_x % 2 != 0
+		&& data->player_y % 2 != 0)))
+		image = data->player1->image;
+	else if (data->map[y][x].type == 'P' && ((data->player_x % 2 == 0
+		&& data->player_y % 2 != 0) || (data->player_x % 2 != 0
+		&& data->player_y % 2 == 0)))
+		image = data->player2->image;
 	else if (data->map[y][x].type == 'D')
-		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-			data->enemy->image, x * data->cell_size, y * data->cell_size);
+		image = data->enemy->image;
 	else if (data->map[y][x].type == 'E'
 		&& data->exit_info.exit_visibility == 1)
-		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-			data->exit->image, x * data->cell_size, y * data->cell_size);
-	else
-		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-			data->background->image, x * data->cell_size, y * data->cell_size);
+		image = data->exit->image;
+	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
+		image, x * data->cell_size, y * data->cell_size);
 }
 
 void	render_map(t_mlx_data *data)

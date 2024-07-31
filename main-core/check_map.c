@@ -30,10 +30,10 @@ static void	count_each(int x, int y, int counter[2], t_mlx_data *data)
 {
 	if ((x == 0) || (x == data->map_width - 1))
 		if (data->map[y][x].type != '1')
-			handle_error("The map not closed not rectangular\n", data);
+			handle_error("Map not closed\n", data);
 	if ((y == 0) || (y == data->map_height - 1))
 		if (data->map[y][x].type != '1')
-			handle_error("The map not closed not rectangular\n", data);
+			handle_error("Map not closed\n", data);
 	if (data->map[y][x].type == 'C')
 		data->collectible_count++;
 	else if (data->map[y][x].type == 'P')
@@ -48,6 +48,9 @@ static void	count_each(int x, int y, int counter[2], t_mlx_data *data)
 		data->exit_info.exit_y = y;
 		counter[1]++;
 	}
+	else if (data->map[y][x].type != 'D' && data->map[y][x].type != '0'
+				&& data->map[y][x].type != '1')
+		handle_error("Wrong character in the map\n", data);
 }
 
 void	check_map(t_mlx_data *data)
@@ -91,6 +94,7 @@ int	check_map_path(char *map_path)
 {
 	int	map_fd;
 
+	ft_printf("%s\n", map_path);
 	if (ft_strnstr(map_path, ".ber", ft_strlen(map_path)))
 	{
 		map_fd = open(map_path, O_RDONLY);
